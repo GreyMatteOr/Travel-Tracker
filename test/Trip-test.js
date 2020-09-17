@@ -11,7 +11,7 @@ describe('Trip', () => {
       "destinationID": 49,
       "travelers": 1,
       "date":"2019/09/16",
-      "duration": 8,
+      "duration": 1,
       "status": "approved",
       "suggestedActivities":[]
     };
@@ -57,10 +57,32 @@ describe('Trip', () => {
   describe('getName()', function() {
 
     it('should return the name of the destination', function() {
-      let destination = {destination: 'Paris'};
-      trip.destination = destination;
+      trip.destination = {destination: 'Paris'};
 
       expect(trip.getName()).to.equal('Paris');
+    });
+
+    it('should return `null` if it has no destination', function() {
+      expect(trip.getName()).to.equal(null);
+    });
+  });
+
+  describe('getBaseCost', function() {
+    it('should return the cost of flights + lodging', function() {
+      trip.destination = {estimatedLodgingCostPerDay: 10, estimatedFlightCostPerPerson: 20}
+      expect(trip.getBaseCost()).to.equal(30);
+
+      trip.travelers = 5;
+      expect(trip.getBaseCost()).to.equal(110);
+
+      trip.duration = 5
+      expect(trip.getBaseCost()).to.equal(150);
+    });
+
+    it('should round the cost to the nearest cent', function () {
+      trip.destination = {estimatedLodgingCostPerDay: .9999, estimatedFlightCostPerPerson: 0};
+
+      expect(trip.getBaseCost()).to.equal(1);
     });
 
     it('should return `null` if it has no destination', function() {
