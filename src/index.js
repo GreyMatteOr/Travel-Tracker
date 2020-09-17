@@ -7,6 +7,8 @@ import goFetch from './fetch-requests.js'
 import User from './User.js'
 import Trip from './Trip.js'
 import Destination from './Destination.js'
+import TripRepo from '../src/TripRepo.js';
+
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/turing-logo.png'
@@ -15,24 +17,18 @@ window.addEventListener("load", retrieveData);
 
 function retrieveData() {
   goFetch.getServerData()
-  .then(responses => Promise.all(responses.map(response => response.json())))
   .then(([u, t, d]) => {
-    destinations = d.destinations.map(dData => new Destination(dData))
-    trips = t.trips.map(tData => {
-      let trip = new Trip(tData);
-      trip.destination = destinations.find(dest => dest.id === trip.destinationID);
-      return trip;
-    });
-    users = u.travelers.map(uData => new User(uData));
+    destinations = d.destinations.map(dData => new Destination(dData));
+    trips = new TripRepo(t.trips, destinations);
+    users = u.travelers;
     generateUser();
   })
-  .catch(err => console.log(err))
+  .catch(err => console.log(err));
 }
 
 function generateUser() {
-  user = users[getRandomIndex(users)]
-  console.log(trips)
-  user.trips = trips.filter(trip => trip.userID === user.id)
+  user = new User (users[getRandomIndex(users)]);
+  user.folio = trips.getFolio(user.id);
   console.log(user)
 }
 
