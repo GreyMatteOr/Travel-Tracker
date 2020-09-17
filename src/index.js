@@ -10,22 +10,34 @@ import Destination from './Destination.js'
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/turing-logo.png'
-let users, trips, destinations;
+let user, users, trips, destinations;
 window.addEventListener("load", retrieveData);
 
 function retrieveData() {
   goFetch.getServerData()
   .then(responses => Promise.all(responses.map(response => response.json())))
   .then(([u, t, d]) => {
-    console.log(u, t, d)
-    users = u.travelers.map(uData => new User(uData));
-    trips = t.trips.map(tData => new Trip(tData));
     destinations = d.destinations.map(dData => new Destination(dData))
-    // generateUser();
-    console.log(users, trips, destinations)
-
+    trips = t.trips.map(tData => {
+      let trip = new Trip(tData);
+      trip.destination = destinations.find(dest => dest.id === trip.destinationID);
+      return trip;
+    });
+    users = u.travelers.map(uData => new User(uData));
+    generateUser();
   })
   .catch(err => console.log(err))
+}
+
+function generateUser() {
+  user = users[getRandomIndex(users)]
+  console.log(trips)
+  user.trips = trips.filter(trip => trip.userID === user.id)
+  console.log(user)
+}
+
+function getRandomIndex( arr ) {
+  return Math.floor(Math.random() * arr.length);
 }
 
 console.log('This is the JavaScript entry file - your code begins here.');
