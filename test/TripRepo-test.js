@@ -30,4 +30,11 @@ describe('TripRepo', () => {
       expect(repo.data).to.deep.equal(data);
     });
   });
+
+  describe('getFolio', () => {
+    it('should return an array of all the trips that match a given userID', function() {
+      expect(repo.getFolio(44)).to.deep.equal(data);
+      expect(repo.getFolio(0)).to.deep.equal([]);
+    });
+  });
 });
