@@ -17,11 +17,12 @@ let goFetch = {
   // },
 
   getServerData() {
-    return Promise.all([
-        fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/travelers/travelers'),
-        fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips'),
-        fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/destinations/destinations')
-      ])
+    let uData = fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/travelers/travelers');
+    let tData = fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips');
+    let dData = fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/destinations/destinations');
+    let promises = [uData, tData, dData];
+    return Promise.all(promises)
+    .then(responses => Promise.all(responses.map(response => response.json())))
   }
 }
 

@@ -15,7 +15,6 @@ window.addEventListener("load", retrieveData);
 
 function retrieveData() {
   goFetch.getServerData()
-  .then(responses => Promise.all(responses.map(response => response.json())))
   .then(([u, t, d]) => {
     destinations = d.destinations.map(dData => new Destination(dData))
     trips = t.trips.map(tData => {
@@ -23,17 +22,15 @@ function retrieveData() {
       trip.destination = destinations.find(dest => dest.id === trip.destinationID);
       return trip;
     });
-    users = u.travelers.map(uData => new User(uData));
+    users = u.travelers;
     generateUser();
   })
   .catch(err => console.log(err))
 }
 
 function generateUser() {
-  user = users[getRandomIndex(users)]
-  console.log(trips)
+  user = new User (users[getRandomIndex(users)]);
   user.trips = trips.filter(trip => trip.userID === user.id)
-  console.log(user)
 }
 
 function getRandomIndex( arr ) {
