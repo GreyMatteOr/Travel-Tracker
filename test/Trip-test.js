@@ -3,8 +3,9 @@ const expect = chai.expect;
 import Trip from '../src/Trip.js';
 
 describe('Trip', () => {
+  let fdata, trip;
   beforeEach(() => {
-    let fdata = {
+    fdata = {
       "id": 1,
       "userID": 44,
       "destinationID": 49,
@@ -15,7 +16,7 @@ describe('Trip', () => {
       "suggestedActivities":[]
     };
 
-    let trip = new Trip(fdata);
+    trip = new Trip(fdata);
   });
 
   describe('Initialization', () => {
