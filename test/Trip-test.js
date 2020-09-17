@@ -53,4 +53,18 @@ describe('Trip', () => {
       expect(trip.status).to.equal(fdata.status);
     });
   });
+
+  describe('getName()', function() {
+
+    it('should return the name of the destination', function() {
+      let destination = {destination: 'Paris'};
+      trip.destination = destination;
+
+      expect(trip.getName()).to.equal('Paris');
+    });
+
+    it('should return `null` if it has no destination', function() {
+      expect(trip.getName()).to.equal(null);
+    });
+  });
 });
