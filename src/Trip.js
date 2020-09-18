@@ -24,7 +24,7 @@ class Trip {
 
   getAgentCost() {
     if (this.destination === undefined) return null;
-    return this.roundToCent(this.agentCost * this.getBaseCost);
+    return this.roundToCent(.1 * this.getBaseCost());
   }
 
   roundToCent(number) {
