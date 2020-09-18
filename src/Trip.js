@@ -4,10 +4,11 @@ class Trip {
     this.userID = data.userID;
     this.destinationID = data.destinationID;
     this.travelers = data.travelers;
-    this.date = data.date;
     this.duration = data.duration;
     this.status = data.status;
     this.suggestedActivities = data.suggestedActivities;
+    let [year, month, day] = data.date.split('/');
+    this.date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   }
 
   getName() {
@@ -28,6 +29,10 @@ class Trip {
 
   roundToCent(number) {
     return Math.round(number * 100) / 100;
+  }
+
+  getYear() {
+    return this.date.getFullYear();
   }
 }
 
