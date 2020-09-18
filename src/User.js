@@ -8,15 +8,14 @@ class User {
 
   getBaseCostAll(year) {
     return this.getTotalYearStat(year, 'getBaseCost')
-
   }
 
-  getAgencyCostAll(year) {
+  getAgentCostAll(year) {
     return this.getTotalYearStat(year, 'getAgentCost')
   }
 
   getTotalYearStat(year, funcName) {
-    return this.trip.reduce((total, trip) => {
+    return this.folio.reduce((total, trip) => {
       if(trip.getYear() === year) total += trip[funcName]();
       return total;
     }, 0);
