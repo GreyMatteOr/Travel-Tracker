@@ -1,9 +1,10 @@
 import chai from 'chai';
 const expect = chai.expect;
 import User from '../src/User.js';
+import Trip from '../src/Trip.js';
 
 describe('User', () => {
-  let uData, user;
+  let uData, user, fdata;
   beforeEach(() => {
     uData = {
       "id": 2,
@@ -12,6 +13,23 @@ describe('User', () => {
     };
 
     user = new User(uData);
+
+    fdata = {
+      "id": 1,
+      "userID": 44,
+      "destinationID": 49,
+      "travelers": 1,
+      "date":"2019/09/16",
+      "duration": 1,
+      "status": "approved",
+      "suggestedActivities":[]
+    };
+
+    user.folio.push(new Trip(fdata));
+    user.folio[0].destination = {
+      "estimatedLodgingCostPerDay": 1,
+      "estimatedFlightCostPerPerson": 1
+    }
   });
 
   describe('Initialization', () => {
@@ -26,6 +44,40 @@ describe('User', () => {
 
     it('should store an travelerType', () => {
       expect(user.travelerType).to.equal(uData.travelerType);
+    });
+  });
+
+  describe('getBaseCostAll()', () => {
+
+    it('should get total cost of all trips the user is going on', () => {
+      expect(user.getBaseCostAll(2019)).to.equal(2);
+
+      user.folio[0].destination.estimatedLodgingCostPerDay = 5;
+      expect(user.getBaseCostAll(2019)).to.equal(6);
+
+      user.folio[0].destination.estimatedFlightCostPerPerson = 5;
+      expect(user.getBaseCostAll(2019)).to.equal(10);
+    });
+
+    it('should return 0 if there were no trips that year', () => {
+      expect(user.getBaseCostAll(2020)).to.equal(0);
+    });
+  });
+
+  describe('getAgentCostAll()', () => {
+
+    it('should get total cost of all trips the user is going on, to the nearest cent', () => {
+      expect(user.getAgentCostAll(2019)).to.equal(.2);
+
+      user.folio[0].destination.estimatedLodgingCostPerDay = 4.5;
+      expect(user.getAgentCostAll(2019)).to.equal(.55);
+
+      user.folio[0].destination.estimatedFlightCostPerPerson = 5;
+      expect(user.getAgentCostAll(2019)).to.equal(.95);
+    });
+
+    it('should return 0 if there were no trips that year', () => {
+      expect(user.getAgentCostAll(2020)).to.equal(0);
     });
   });
 });

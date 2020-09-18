@@ -1,13 +1,19 @@
+import time from './time.js';
+
 class Trip {
   constructor(data) {
     this.id = data.id;
     this.userID = data.userID;
     this.destinationID = data.destinationID;
     this.travelers = data.travelers;
-    this.date = data.date;
     this.duration = data.duration;
     this.status = data.status;
     this.suggestedActivities = data.suggestedActivities;
+    if(typeof(data.date) === 'object') this.date = data.date;
+    else {
+      let [year, month, day] = data.date.split('/');
+      this.date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    }
   }
 
   getName() {
@@ -23,11 +29,19 @@ class Trip {
 
   getAgentCost() {
     if (this.destination === undefined) return null;
-    return this.roundToCent(this.agentCost * this.getBaseCost);
+    return this.roundToCent(.1 * this.getBaseCost());
   }
 
   roundToCent(number) {
     return Math.round(number * 100) / 100;
+  }
+
+  getYear() {
+    return this.date.getFullYear();
+  }
+
+  isCurrent(today) {
+    return time.isBetween(this.date, today, time.daysFromDate(this.date, this.duration));
   }
 }
 

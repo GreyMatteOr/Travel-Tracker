@@ -8,6 +8,8 @@ import User from './User.js'
 import Trip from './Trip.js'
 import Destination from './Destination.js'
 import TripRepo from '../src/TripRepo.js';
+import flatpickr from "flatpickr";
+
 
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
@@ -24,6 +26,8 @@ function retrieveData() {
     generateUser();
   })
   .catch(err => console.log(err));
+  let element = document.querySelector('h1');
+  flatpickr(element, {});
 }
 
 function generateUser() {
