@@ -1,4 +1,4 @@
-import time from './Time.js';
+import time from './time.js';
 
 class Trip {
   constructor(data) {
@@ -9,8 +9,11 @@ class Trip {
     this.duration = data.duration;
     this.status = data.status;
     this.suggestedActivities = data.suggestedActivities;
-    let [year, month, day] = data.date.split('/');
-    this.date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    if(typeof(data.date) === 'object') this.date = data.date;
+    else {
+      let [year, month, day] = data.date.split('/');
+      this.date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    }
   }
 
   getName() {

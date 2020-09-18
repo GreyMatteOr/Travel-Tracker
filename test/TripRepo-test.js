@@ -4,7 +4,7 @@ import Trip from '../src/Trip.js';
 import TripRepo from '../src/TripRepo.js';
 
 
-describe('TripRepo', () => {
+describe.only('TripRepo', () => {
   let data, repo, trip;
   beforeEach(() => {
     let tData = {
@@ -31,10 +31,21 @@ describe('TripRepo', () => {
     });
   });
 
-  describe('getFolio', () => {
-    it('should return an array of all the trips that match a given userID', function() {
-      expect(repo.getFolio(44)).to.deep.equal(data);
-      expect(repo.getFolio(0)).to.deep.equal([]);
+  describe('getFolioByUser', () => {
+
+    it('should return a new TripRepo of all the trips that match a given userID', function() {
+      
+      expect(repo.getFolioByUser(44)).to.deep.equal(new TripRepo(data, []));
+      expect(repo.getFolioByUser(0)).to.deep.equal(new TripRepo([], []));
+    });
+  });
+
+  describe('getFolioByYear', () => {
+
+    it('should return a new TripRepo of all the trips that match a given userID', function() {
+
+      expect(repo.getFolioByYear(2019)).to.deep.equal(new TripRepo(data, []));
+      expect(repo.getFolioByYear(0)).to.deep.equal(new TripRepo([], []));
     });
   });
 });
