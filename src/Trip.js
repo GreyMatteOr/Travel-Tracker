@@ -1,3 +1,5 @@
+import time from './Time.js';
+
 class Trip {
   constructor(data) {
     this.id = data.id;
@@ -33,6 +35,10 @@ class Trip {
 
   getYear() {
     return this.date.getFullYear();
+  }
+
+  isCurrent(today) {
+    return time.isBetween(this.date, today, time.daysFromDate(this.date, this.duration));
   }
 }
 

@@ -2,7 +2,7 @@ import chai from 'chai';
 const expect = chai.expect;
 import Trip from '../src/Trip.js';
 
-describe('Trip', () => {
+describe.only('Trip', () => {
   let fdata, trip;
   beforeEach(() => {
     fdata = {
@@ -68,6 +68,7 @@ describe('Trip', () => {
   });
 
   describe('getAgentCost', () => {
+
     it('should return the cost of flights + lodging', () => {
       trip.destination = {estimatedLodgingCostPerDay: 10, estimatedFlightCostPerPerson: 20}
       expect(trip.getBaseCost()).to.equal(30);
@@ -93,6 +94,7 @@ describe('Trip', () => {
   });
 
   describe('getAgentCost', () => {
+
     it('should return the cost of flights + lodging', () => {
       trip.destination = {estimatedLodgingCostPerDay: 10, estimatedFlightCostPerPerson: 20}
       expect(trip.getAgentCost()).to.equal(3);
@@ -118,8 +120,28 @@ describe('Trip', () => {
   });
 
   describe('getYear()', () => {
+
     it('should return the year of Trip\'s date', () => {
       expect(trip.getYear()).to.equal(2019);
+    });
+  });
+
+  describe('isCurrent()', () => {
+
+    it('should return `true` if the given date is inside the trip range', () => {
+      let now = new Date(2019, 8, 16);
+      let tomorrow = new Date(2019, 8, 17);
+
+      expect(trip.isCurrent(now)).to.equal(true);
+      expect(trip.isCurrent(tomorrow)).to.equal(true);
+    });
+
+    it('should return `false` if the given date is outside the trip range', () => {
+      let before = new Date(2019, 8, 15, 23, 59, 59);
+      let after = new Date(2019, 8, 17, 0, 0, 1)
+
+      expect(trip.isCurrent(before)).to.equal(false);
+      expect(trip.isCurrent(after)).to.equal(false);
     });
   });
 });
