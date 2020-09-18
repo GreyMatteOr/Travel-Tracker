@@ -17,9 +17,9 @@ class TripRepo {
   }
 
   getFolioByYear(year) {
-    let beg = new Date( year );
-    let end = new Date( year + 1);
-    return new TripRepo(this.data.filter(trip => time.isBetween(beg, trip.date, end), null, false));
+    let beg = new Date( year, 0, 0);
+    let end = new Date( year + 1, 0, 0);
+    return new TripRepo(this.data.filter(trip => time.isBetween(beg, trip.date, end)), null, false);
   }
 }
 

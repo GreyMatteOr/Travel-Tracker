@@ -32,9 +32,20 @@ describe.only('TripRepo', () => {
   });
 
   describe('getFolioByUser', () => {
+
     it('should return a new TripRepo of all the trips that match a given userID', function() {
+      
       expect(repo.getFolioByUser(44)).to.deep.equal(new TripRepo(data, []));
       expect(repo.getFolioByUser(0)).to.deep.equal(new TripRepo([], []));
+    });
+  });
+
+  describe('getFolioByYear', () => {
+
+    it('should return a new TripRepo of all the trips that match a given userID', function() {
+
+      expect(repo.getFolioByYear(2019)).to.deep.equal(new TripRepo(data, []));
+      expect(repo.getFolioByYear(0)).to.deep.equal(new TripRepo([], []));
     });
   });
 });
