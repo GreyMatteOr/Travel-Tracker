@@ -21,7 +21,7 @@ describe('TripRepo', () => {
     trip.destination = undefined;
     data = [trip]
 
-    repo = new TripRepo(data, []);
+    repo = new TripRepo([tData], []);
   });
 
   describe('Initialization', () => {
