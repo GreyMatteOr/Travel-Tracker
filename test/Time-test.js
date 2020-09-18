@@ -1,8 +1,8 @@
 import chai from 'chai';
 const expect = chai.expect;
-import time from '../src/Time.js';
+import time from '../src/time.js';
 
-describe('Time', () => {
+describe('time', () => {
     let date = new Date(2020, 0, 1);
     let tomorrow = new Date(2020, 0, 2);
     let yesterday = new Date(2019, 11, 31);
