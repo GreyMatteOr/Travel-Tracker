@@ -14,8 +14,8 @@ import flatpickr from "flatpickr";
 
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
-// import './images/turing-logo.png'
-let calendar = document.querySelector('#date button');
+import './images/GV-logo.png';
+let calendar = document.querySelector('#date time');
 let user, users, trips, destinations, date, currentYear;
 window.addEventListener("load", () => {
   retrieveData();
