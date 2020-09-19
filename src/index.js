@@ -2,6 +2,7 @@
 // Do not delete or rename this file ********
 
 // An example of how you tell webpack to use a CSS (SCSS) file
+import './css/normalize.scss';
 import './css/base.scss';
 import goFetch from './fetch-requests.js'
 import User from './User.js'
