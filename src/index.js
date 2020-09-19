@@ -14,8 +14,12 @@ import flatpickr from "flatpickr";
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/turing-logo.png'
-let user, users, trips, destinations;
-window.addEventListener("load", retrieveData);
+let calendar = document.querySelector('#date button');
+let user, users, trips, destinations, date, currentYear;
+window.addEventListener("load", () => {
+  retrieveData();
+  createCalendar();
+});
 
 function retrieveData() {
   goFetch.getServerData()
@@ -24,16 +28,36 @@ function retrieveData() {
     trips = new TripRepo(t.trips, destinations);
     users = u.travelers;
     generateUser();
+
   })
   .catch(err => console.log(err));
-  let element = document.querySelector('h1');
-  flatpickr(element, {});
 }
 
 function generateUser() {
   user = new User (users[getRandomIndex(users)]);
-  user.folio = trips.getFolio(user.id);
+  user.folio = trips.getFolioByUser(user.id);
   console.log(user)
+}
+
+function createCalendar() {
+  date = Date();
+  flatpickr(calendar, {
+    defaultDate: 'today',
+    onChange: displayCurrentDate
+  });
+  displayCurrentDate([Date()]);
+}
+
+function displayCurrentDate([newDate]) {
+  date = new Date(newDate);
+  calendar.innerText = date.toString().slice(0, 15);
+  console.log(date)
+  if(currentYear !== date.getFullYear()) getStatsForYear();
+}
+
+function getStatsForYear() {
+  console.log('It\s now', date.getFullYear());
+  currentYear = date.getFullYear()
 }
 
 function getRandomIndex( arr ) {
