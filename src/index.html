@@ -8,20 +8,39 @@
 </head>
   <body>
     <header>
-      <h2 class='main-font secondary-color' id='welcome-msg'>Welcome, User!</h2>
+      <h1 class='main-font secondary-color' id='welcome-msg'>Welcome, User!</h1>
+      <nav>
+        <button class='main-font med-text primary-color'>Past Trips</button>
+        <button class='main-font med-text primary-color'>Current Trips</button>
+        <button class='main-font med-text primary-color'> Upcoming Trips</button>
+        <button class='main-font med-text primary-color'>Book with us!</button
+      </nav>
       <section id='date'>
         <button>
           <time class='main-font med-text primary-color'></time>
         </button>
       </section>
       <section id='logo'>
-        <h2 class='main-font primary-color'>GUVIS</h2>
+        <h1 class='main-font primary-color'>GUVIS</h1>
         <img src='' alt='The GUVIS Logo'/>
       </section>
     </header>
-
-    <img src="./images/turing-logo.png" alt="turing logo" height="100px" width="100px">
-
+    <main>
+      <section id='trips-display'>
+        <h2>Current Trips</h2>
+      </section>
+    </main>
+    <footer>
+      <address>
+        <p id='mail-address'>
+        1331 17th Street
+        Suite LL100
+        Denver, CO 80202
+        </p>
+        <p id='phone'>Phone: 303.731.3117</p>
+        <p id='email'>Email: spoof@guvis.mail.com</p>
+      </address>
+    </footer>
     <!-- Do not include the index.js or main.bundle.js file here - it is done automatically by the webpack server -->
   </body>
 </html>
