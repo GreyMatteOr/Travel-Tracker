@@ -16,11 +16,20 @@ import flatpickr from "flatpickr";
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/GV-logo.png';
 let calendar = document.querySelector('#date time');
+let currentTripsBtn = document.querySelector('#current-btn');
+let newTripsBtn = document.querySelector('#book-trip-btn');
+let pastTripsBtn = document.querySelector('#past-btn');
+let titleH1 = document.querySelector('#main-title');
+let upcomingTripsBtn = document.querySelector('#upcoming-btn');
 let user, users, trips, destinations, date, currentYear;
 window.addEventListener("load", () => {
   retrieveData();
   createCalendar();
 });
+currentTripsBtn.addEventListener('click', () => toggleMain('Current Trips'));
+newTripsBtn.addEventListener('click', () => toggleMain('Looking for adventure?'));
+pastTripsBtn.addEventListener('click', () => toggleMain('Past Trips'));
+upcomingTripsBtn.addEventListener('click', () => toggleMain('Upcoming Trips'));
 
 function retrieveData() {
   goFetch.getServerData()
@@ -58,6 +67,10 @@ function displayCurrentDate([newDate]) {
 function getStatsForYear() {
   console.log('It\s now', date.getFullYear());
   currentYear = date.getFullYear()
+}
+
+function toggleMain(titleText) {
+  titleH1.innerText = titleText;
 }
 
 function getRandomIndex( arr ) {
