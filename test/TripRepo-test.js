@@ -4,7 +4,7 @@ import Trip from '../src/Trip.js';
 import TripRepo from '../src/TripRepo.js';
 
 
-describe.only('TripRepo', () => {
+describe('TripRepo', () => {
   let data, repo, trip;
   beforeEach(() => {
     let tData = {
@@ -34,7 +34,7 @@ describe.only('TripRepo', () => {
   describe('getFolioByUser', () => {
 
     it('should return a new TripRepo of all the trips that match a given userID', function() {
-      
+
       expect(repo.getFolioByUser(44)).to.deep.equal(new TripRepo(data, []));
       expect(repo.getFolioByUser(0)).to.deep.equal(new TripRepo([], []));
     });

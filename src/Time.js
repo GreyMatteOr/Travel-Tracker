@@ -6,6 +6,14 @@ let time = {
 
   isBetween(beg, test, end) {
     return beg.getTime() <= test.getTime() && test.getTime() <= end.getTime();
+  },
+
+  isBefore(test, reference) {
+    return test.getTime() < reference.getTime();
+  },
+
+  isAfter(test, reference) {
+    return test.getTime() > reference.getTime();
   }
 }
 
