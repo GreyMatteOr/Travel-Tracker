@@ -70,7 +70,31 @@ function getStatsForYear() {
 }
 
 function toggleMain(titleText) {
+  let pageDisplays = {
+    'Current Trips': () => displayTrips('getCurrentFolio'),
+    'Looking for adventure?': () => displayBookingForm(),
+    'Past Trips': () => displayTrips('getPastFolio'),
+    'Upcoming Trips': () => displayTrips('getUpcomingFolio')
+  };
   titleH1.innerText = titleText;
+  pageDisplays[titleText]();
+}
+
+function displayTrips(folioFunction) {
+  let trips = user.folio[folioFunction](new Date()).data;
+  let lists = document.querySelectorAll('.trips');
+  lists.forEach(list => list.innerHTML = '');
+  trips.forEach(trip => {
+    let tripHTML = `
+      <li>${trip.getName()}</li>
+    `;
+    lists[0].innerHTML += tripHTML;
+    lists[1].innerHTML += tripHTML;
+  });
+}
+
+function displayBookingForm() {
+  console.log('BOOK ADVENTURE!');
 }
 
 function getRandomIndex( arr ) {
