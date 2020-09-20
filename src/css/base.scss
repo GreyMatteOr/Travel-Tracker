@@ -1,7 +1,93 @@
 /* This is an example of using Sass, otherwise plain CSS works too*/
-$primary-background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-;
+$primary-background: grey;
+@import url('https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@1,500&family=Merriweather:ital,wght@0,300;0,900;1,700;1,900&display=swap');
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
 
 body {
-  background: $primary-background;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  text-align: center;
+
+  header {
+    background-color: purple;
+    grid-row: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: .75em 1.5em;
+
+    nav {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      button {
+        margin: .5em;
+      }
+    }
+
+    #logo {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin: 0;
+
+      h1 {
+        margin: 0;
+      }
+
+      img {
+        height: 2.5em;
+        width: auto;;
+      }
+    }
+  }
+
+  main {
+    width: 100%;
+    grid-row: 2;
+    background-color: darkgoldenrod;
+    display: grid;
+    grid-template-columns: max-content auto;
+
+    aside {
+      grid-column: 1;
+      background-color: gold;
+      padding: .75em 1.5em;
+    }
+
+    section {
+      grid-column: 2;
+    }
+  }
+
+  footer {
+    grid-row: 3;
+  }
+
+  .main-font {
+    font-family: 'Merriweather', serif;
+  }
+
+  .secondary-font {
+    font-family: 'Grandstander', cursive;
+  }
+
+  .light {
+    font-weight: 300;
+  }
+
+  .italic {
+    font-style: italic;
+  }
+
+  button {
+    border-radius: .325em;
+    padding: .25em;
+  }
 }

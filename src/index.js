@@ -2,6 +2,7 @@
 // Do not delete or rename this file ********
 
 // An example of how you tell webpack to use a CSS (SCSS) file
+import './css/normalize.scss';
 import './css/base.scss';
 import goFetch from './fetch-requests.js'
 import User from './User.js'
@@ -13,8 +14,8 @@ import flatpickr from "flatpickr";
 
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
-// import './images/turing-logo.png'
-let calendar = document.querySelector('#date button');
+import './images/GV-logo.png';
+let calendar = document.querySelector('#date time');
 let user, users, trips, destinations, date, currentYear;
 window.addEventListener("load", () => {
   retrieveData();
