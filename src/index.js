@@ -4,12 +4,14 @@
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/normalize.scss';
 import './css/base.scss';
+import domscripts from "./domscripts.js";
+import flatpickr from "flatpickr";
 import goFetch from './fetch-requests.js'
 import User from './User.js'
 import Trip from './Trip.js'
 import Destination from './Destination.js'
 import TripRepo from '../src/TripRepo.js';
-import flatpickr from "flatpickr";
+
 
 
 
@@ -17,9 +19,11 @@ import flatpickr from "flatpickr";
 import './images/GV-logo.png';
 let calendar = document.querySelector('#date time');
 let currentTripsBtn = document.querySelector('#current-btn');
+let lists = document.querySelectorAll('.trips');
 let newTripsBtn = document.querySelector('#book-trip-btn');
 let pastTripsBtn = document.querySelector('#past-btn');
-let titleH1 = document.querySelector('#main-title');
+let mainTitle = document.querySelector('#main-title');
+let sidebarTitle = document.querySelector('#side-bar h3')
 let upcomingTripsBtn = document.querySelector('#upcoming-btn');
 let user, users, trips, destinations, date, currentYear;
 window.addEventListener("load", () => {
@@ -76,20 +80,17 @@ function toggleMain(titleText) {
     'Past Trips': () => displayTrips('getPastFolio'),
     'Upcoming Trips': () => displayTrips('getUpcomingFolio')
   };
-  titleH1.innerText = titleText;
+  mainTitle.innerText = titleText;
+  sidebarTitle.innerText = titleText;
   pageDisplays[titleText]();
 }
 
 function displayTrips(folioFunction) {
   let trips = user.folio[folioFunction](new Date()).data;
-  let lists = document.querySelectorAll('.trips');
   lists.forEach(list => list.innerHTML = '');
   trips.forEach(trip => {
-    let tripHTML = `
-      <li>${trip.getName()}</li>
-    `;
-    lists[0].innerHTML += tripHTML;
-    lists[1].innerHTML += tripHTML;
+    lists[0].innerHTML += domscripts.createTripNavLink(trip);
+    lists[1].innerHTML += domscripts.createTripCard(trip);
   });
 }
 
