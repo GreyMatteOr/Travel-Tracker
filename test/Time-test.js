@@ -33,4 +33,36 @@ describe('time', () => {
       expect(time.isBetween(yesterday, oneMSAfterTomorrow, tomorrow)).to.equal(false);
     });
   });
+
+  describe('isBefore()', () => {
+
+    it('should return `true` if a Date falls before a reference date', () => {
+
+      expect(time.isBefore(yesterday, date)).to.equal(true);
+      expect(time.isBefore(date, tomorrow)).to.equal(true);
+    });
+
+    it('should return `false` if a Date doesn\'t come before it', () => {
+
+      expect(time.isBefore(tomorrow, date)).to.equal(false);
+      expect(time.isBefore(date, yesterday)).to.equal(false);
+      expect(time.isBefore(date, date)).to.equal(false);
+    });
+  });
+
+  describe('isAfter()', () => {
+
+    it('should return `true` if a Date falls after a reference date', () => {
+
+      expect(time.isAfter(date, yesterday)).to.equal(true);
+      expect(time.isAfter(tomorrow, date)).to.equal(true);
+    });
+
+    it('should return `false` if a Date doesn\'t come after it', () => {
+
+      expect(time.isAfter(date, tomorrow)).to.equal(false);
+      expect(time.isAfter(yesterday, date)).to.equal(false);
+      expect(time.isAfter(date, date)).to.equal(false);
+    });
+  });
 });
