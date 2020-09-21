@@ -17,6 +17,7 @@ let domscripts = {
   },
 
   createDestinationsSelection(destinations) {
+    destinations.sort((a, b) => a.name.localeCompare(b.name));
     let select = document.querySelector('#destinations');
     destinations.forEach(destination  => {
       select.innerHTML += `<option value='${destination.id}'>${destination.name}</option>`

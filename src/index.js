@@ -25,19 +25,24 @@ let mainTitle = document.querySelector('#main-title');
 let sidebarTitle = document.querySelector('#side-bar h3')
 let tripsList = document.querySelector('.trips');
 let upcomingTripsBtn = document.querySelector('#upcoming-btn');
-let beginDate, endDate, destinations, user, users, trips;
+let beginDate, beginCalendar, endDate, endCalendar, destinations, user, users, trips;
 
-window.addEventListener("load", () => {
-  retrieveData();
-  createCalendar('begin-date-calendar');
-  createCalendar('end-date-calendar');
-  domscripts.createNumberSelector();
-});
+
 calculate.addEventListener('click', bookNewTrip);
 currentTripsBtn.addEventListener('click', () => toggleMain('Current Trips'));
 newTripsBtn.addEventListener('click', () => toggleMain('Looking for adventure?'));
 pastTripsBtn.addEventListener('click', () => toggleMain('Past Trips'));
 upcomingTripsBtn.addEventListener('click', () => toggleMain('Upcoming Trips'));
+window.addEventListener("load", () => {
+  retrieveData();
+  let startDate = new Date();
+  startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  beginCalendar = createCalendar('begin-date-calendar', startDate);
+  endCalendar = createCalendar('end-date-calendar', time.daysFromDate(startDate, 7));
+  changeDate(startDate, 'begin-date-calendar');
+  changeDate(time.daysFromDate(startDate, 7), 'end-date-calendar');
+  domscripts.createNumberSelector();
+});
 
 function retrieveData() {
   goFetch.getServerData()
@@ -57,21 +62,23 @@ function generateUser() {
   console.log(user)
 }
 
-function createCalendar(nodeID) {
+function createCalendar(nodeID, date) {
   let node = document.querySelector(`#${nodeID}`);
   console.log(node)
-  flatpickr(node, {
-    defaultDate: 'today',
+  return flatpickr(node, {
+    defaultDate: date,
+    minDate: new Date(),
     onChange: ([date]) => changeDate(date, nodeID)
   });
-  changeDate(new Date(), nodeID);
 }
 
 function changeDate(newDate, nodeID) {
-  console.log(typeof(newDate));
-  nodeID[0] === 'b' ? beginDate = newDate : endDate = newDate;
-  console.log(nodeID)
-  console.log(beginDate, endDate)
+  if (nodeID[0] === 'b') {
+    beginDate = newDate;
+  } else {
+    endDate = newDate;
+    endCalendar.minDate = newDate;
+  }
   document.querySelector(`#${nodeID} time`).innerText = newDate.toString().slice(0, 15);
 }
 
@@ -103,8 +110,11 @@ function bookNewTrip() {
   let destID = document.querySelector('#destinations').value;
   let countPeople = document.querySelector('#number-of-people').value;
   let duration = time.daysBetween(beginDate, endDate);
-  console.log(trips.getNewID(), user.id, destID, countPeople, beginDate, duration)
+  if (duration < 1)  alert('Trip must be at least 1 day long!');
+  else {
+  console.log(trips.getNewTripID(), user.id, destID, countPeople, beginDate, duration)
   // domscripts.postNewTripRequest(trips.getNewID(), user.id, destID, countPeople, beginDate, duration);
+  }
 }
 
 function getRandomIndex( arr ) {
