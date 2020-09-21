@@ -9,7 +9,9 @@ class TripRepo {
         trip.destination = destinations.find(dest => dest.id === trip.destinationID);
         return trip;
       });
+      this.data.sort((a, b) => a.localCompare(b));
     } else this.data = data;
+    this.countIDs();
   }
 
   getFolioByUser(id) {
@@ -38,6 +40,23 @@ class TripRepo {
       let endDate = time.daysFromDate(trip.date, trip.duration);
       return time.isBetween(trip.date, date, endDate);
     }), null, false);
+  }
+
+  getNewTripID() {
+    for(let i = 0; i < this.data.length; i++) {
+      let newIDLow = this.data[i].id - 1;
+      if (this.tripIDs[newIDLow] === undefined && newIDLow > 0) return newIDLow;
+      let newIDHigh = this.data[i].id + 1;
+      if (this.tripIDs[newIDHigh] === undefined) return newIDHigh;
+    }
+    throw 'Corrupted ID Inventory Object'
+  }
+
+  countIDs() {
+    this.tripIDs = this.data.reduce((memory, trip) => {
+      memory[trip.id] = trip;
+      return memory;
+    }, {})
   }
 }
 
