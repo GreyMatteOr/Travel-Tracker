@@ -4,8 +4,9 @@ import Trip from '../src/Trip.js';
 import TripRepo from '../src/TripRepo.js';
 
 
-describe('TripRepo', () => {
+describe.only('TripRepo', () => {
   let data, repo, trip;
+
   beforeEach(() => {
     let tData = {
       "id": 1,
@@ -26,9 +27,13 @@ describe('TripRepo', () => {
 
   describe('Initialization', () => {
 
-    it('should store an data', () => {
+    it('should store an array of trips', () => {
       expect(repo.data).to.deep.equal(data);
     });
+
+    it('should store an Object that stores all TripIDs', () => {
+      expect(repo.tripIDs).to.deep.equal({1: trip})
+    })
   });
 
   describe('getFolioByUser', () => {
@@ -56,14 +61,14 @@ describe('TripRepo', () => {
       let date = new Date(2019, 8, 25);
       expect(repo.getPastFolio(date)).to.deep.equal(repo);
 
-      let bad = new Date(2019, 8, 24);
-      expect(repo.getPastFolio(bad)).to.deep.equal(new TripRepo([], []));
+      let beforeEnd = new Date(2019, 8, 24);
+      expect(repo.getPastFolio(beforeEnd)).to.deep.equal(new TripRepo([], []));
     });
   });
 
   describe('getCurrentFolio', () => {
 
-    it('should return a new TripRepo of all the trips that have ended already', () => {
+    it('should return a new TripRepo of all the trips that have begun but not ended yet', () => {
 
       let beg = new Date(2019, 8, 16);
       let middle = new Date(2019, 8, 20);
@@ -81,13 +86,21 @@ describe('TripRepo', () => {
 
   describe('getUpcomingFolio', () => {
 
-    it('should return a new TripRepo of all the trips that have ended already', () => {
+    it('should return a new TripRepo of all the trips that haven\'t started yet', () => {
 
       let date = new Date(2019, 8, 15);
       expect(repo.getUpcomingFolio(date)).to.deep.equal(repo);
 
-      let bad = new Date(2019, 8, 16);
-      expect(repo.getUpcomingFolio(bad)).to.deep.equal(new TripRepo([], []));
+      let alreadyStarted = new Date(2019, 8, 16);
+      expect(repo.getUpcomingFolio(alreadyStarted)).to.deep.equal(new TripRepo([], []));
+    });
+  });
+
+  describe('getNewTripID', () => {
+
+    it('should return a new, unused ID', () => {
+
+      expect(repo.getNewTripID()).to.equal(2);
     });
   });
 });
