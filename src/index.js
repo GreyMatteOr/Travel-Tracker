@@ -17,18 +17,21 @@ import TripRepo from '../src/TripRepo.js';
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/GV-logo.png';
-let calendar = document.querySelector('#date time');
+let bookingForm = document.querySelector('.book-trip-form');
 let currentTripsBtn = document.querySelector('#current-btn');
-let lists = document.querySelectorAll('.trips');
 let newTripsBtn = document.querySelector('#book-trip-btn');
 let pastTripsBtn = document.querySelector('#past-btn');
 let mainTitle = document.querySelector('#main-title');
 let sidebarTitle = document.querySelector('#side-bar h3')
+let tripsList = document.querySelector('.trips');
 let upcomingTripsBtn = document.querySelector('#upcoming-btn');
-let user, users, trips, destinations, date, currentYear;
+let beginDate, endDate, destinations, user, users, trips;
+
 window.addEventListener("load", () => {
   retrieveData();
-  createCalendar();
+  createCalendar('begin-date-calendar');
+  createCalendar('end-date-calendar');
+  domscripts.createNumberSelector();
 });
 currentTripsBtn.addEventListener('click', () => toggleMain('Current Trips'));
 newTripsBtn.addEventListener('click', () => toggleMain('Looking for adventure?'));
@@ -42,7 +45,7 @@ function retrieveData() {
     trips = new TripRepo(t.trips, destinations);
     users = u.travelers;
     generateUser();
-
+    domscripts.createDestinationsSelection(destinations);
   })
   .catch(err => console.log(err));
 }
@@ -53,24 +56,22 @@ function generateUser() {
   console.log(user)
 }
 
-function createCalendar() {
-  date = Date();
-  flatpickr(calendar, {
+function createCalendar(nodeID) {
+  let node = document.querySelector(`#${nodeID}`);
+  console.log(node)
+  flatpickr(node, {
     defaultDate: 'today',
-    onChange: displayCurrentDate
+    onChange: ([date]) => changeDate(date, nodeID)
   });
-  displayCurrentDate([Date()]);
+  changeDate(new Date(), nodeID);
 }
 
-function displayCurrentDate([newDate]) {
-  date = new Date(newDate);
-  calendar.innerText = date.toString().slice(0, 15);
-  if(currentYear !== date.getFullYear()) getStatsForYear();
-}
-
-function getStatsForYear() {
-  console.log('It\s now', date.getFullYear());
-  currentYear = date.getFullYear()
+function changeDate(newDate, nodeID) {
+  console.log(typeof(newDate));
+  nodeID[0] === 'b' ? beginDate = newDate : endDate = newDate;
+  console.log(nodeID)
+  console.log(beginDate, endDate)
+  document.querySelector(`#${nodeID} time`).innerText = newDate.toString().slice(0, 15);
 }
 
 function toggleMain(titleText) {
@@ -81,21 +82,20 @@ function toggleMain(titleText) {
     'Upcoming Trips': () => displayTrips('getUpcomingFolio')
   };
   mainTitle.innerText = titleText;
-  sidebarTitle.innerText = titleText;
   pageDisplays[titleText]();
 }
 
 function displayTrips(folioFunction) {
   let trips = user.folio[folioFunction](new Date()).data;
-  lists.forEach(list => list.innerHTML = '');
-  trips.forEach(trip => {
-    lists[0].innerHTML += domscripts.createTripNavLink(trip);
-    lists[1].innerHTML += domscripts.createTripCard(trip);
-  });
+  tripsList.innerHTML = '';
+  trips.forEach(trip => tripsList.innerHTML += domscripts.createTripCard(trip));
+  bookingForm.classList.add('hidden');
+  tripsList.classList.remove('hidden');
 }
 
 function displayBookingForm() {
-  console.log('BOOK ADVENTURE!');
+  bookingForm.classList.remove('hidden');
+  tripsList.classList.add('hidden');
 }
 
 function getRandomIndex( arr ) {

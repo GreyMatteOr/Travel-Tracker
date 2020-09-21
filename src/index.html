@@ -16,29 +16,29 @@
         <button class='main-font light primary-color' id='upcoming-btn'>Upcoming Trips</button>
         <button class='main-font light primary-color' id='book-trip-btn'>Book with us!</button>
       </nav>
-      <section id='date'>
-        <button>
-          <time class='main-font light primary-color'></time>
-        </button>
-      </section>
       <section id='logo'>
         <img src='./images/GV-logo.png' alt='The GUVIS Logo'/>
         <h1 class='secondary-font primary-color'>GUVIS</h1>
       </section>
     </header>
     <main>
-      <aside id='side-bar'>
-        <nav>
-          <h3 class='main-font'>Current Trips</h3>
-          <ul class='trips'>
-
-          </ul>
-        </nav>
-      </aside>
       <section id='trips-display'>
         <h1 class='main-font italic' id='main-title'>Current Trips</h1>
-        <section class='trips'>
-
+        <section class='trips'></section>
+        <section class='book-trip-form hidden'>
+          <h3>Where would you like to go?</h3>
+          <select id='destinations'></select>
+          <h3>When would you like to depart?</h3>
+          <button id='begin-date-calendar'>
+            <time class='main-font light primary-color'></time>
+          </button>
+          <h3>When would you like to return?</h3>
+          <button id='end-date-calendar'>
+            <time class='main-font light primary-color'></time>
+          </button>
+          <h3>How many people will be on the trip?</h3>
+          <select id='number-of-people'></select>
+          <button class="calculate">Calculate costs!</button>
         </section>
       </section>
     </main>
@@ -53,6 +53,5 @@
         <p id='email'>Email: spoof@guvis.mail.com</p>
       </address>
     </footer>
-    <!-- Do not include the index.js or main.bundle.js file here - it is done automatically by the webpack server -->
   </body>
 </html>

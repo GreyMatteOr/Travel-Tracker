@@ -24,7 +24,7 @@ describe('Destination', () => {
     });
 
     it('should store an destination', () => {
-      expect(destination.destination).to.equal(dData.destination);
+      expect(destination.name).to.equal(dData.destination);
     });
 
     it('should store an estimatedLodgingCostPerDay', () => {

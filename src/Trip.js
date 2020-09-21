@@ -17,7 +17,7 @@ class Trip {
   }
 
   getName() {
-    return (this.destination ? this.destination.destination : null);
+    return (this.destination ? this.destination.name : null);
   }
 
   getBaseCost() {

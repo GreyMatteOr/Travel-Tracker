@@ -63,6 +63,35 @@ body {
 
     section {
       grid-column: 2;
+      padding: 2em;
+
+      .trip-card {
+        position: relative;
+        background-color: rgba(255,255,255,.6);
+        box-shadow: 3px 3px 3px #000;
+        border-radius: 2em;
+        height: 200px;
+
+        img {
+          position: absolute;
+          z-index: 1;
+          left:0;
+          width: auto;
+          height: 200px;
+          border-radius: 2em;
+
+        }
+
+        .card-text {
+          position: absolute;
+          z-index: 2;
+          top: 0;
+          width: max-content;
+          background-color: rgba(255,255,255,.6);
+          box-shadow: 3px 3px 3px #000;
+          border-radius: 1.5em;
+        }
+      }
     }
   }
 
@@ -89,5 +118,9 @@ body {
   button {
     border-radius: .325em;
     padding: .25em;
+  }
+
+  .hidden {
+    display: none;
   }
 }

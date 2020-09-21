@@ -16,10 +16,16 @@ let domscripts = {
     `
   },
 
-  createTripNavLink(trip) {
-    return `
-      <li>${trip.getName()}</li>
-    `;
+  createDestinationsSelection(destinations) {
+    let select = document.querySelector('#destinations');
+    destinations.forEach(destination  => {
+      select.innerHTML += `<option value='${destination.name}'>${destination.name}</option>`
+    });
+  },
+
+  createNumberSelector() {
+    let select = document.querySelector('#number-of-people');
+    for(let i = 1; i <= 20; i++) select.innerHTML += `<option value='${i}'>${i}</option>`;
   }
 }
 
