@@ -22,7 +22,7 @@ describe.only('TripRepo', () => {
     trip.destination = undefined;
     data = [trip]
 
-    repo = new TripRepo([tData], []);
+    repo = new TripRepo([tData]);
   });
 
   describe('Initialization', () => {

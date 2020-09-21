@@ -2,7 +2,7 @@ import Trip from '../src/Trip.js';
 import time from '../src/time.js';
 
 class TripRepo {
-  constructor(data, destinations, isNew = true) {
+  constructor(data, destinations = [], isNew = true) {
     if (isNew) {
       this.data = data.map(tripInfo => {
         let trip = new Trip(tripInfo);
