@@ -11,13 +11,12 @@ import User from './User.js'
 import Trip from './Trip.js'
 import Destination from './Destination.js'
 import TripRepo from '../src/TripRepo.js';
-
-
-
+import time from './time.js';
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/GV-logo.png';
 let bookingForm = document.querySelector('.book-trip-form');
+let calculate = document.querySelector('#calculate');
 let currentTripsBtn = document.querySelector('#current-btn');
 let newTripsBtn = document.querySelector('#book-trip-btn');
 let pastTripsBtn = document.querySelector('#past-btn');
@@ -25,18 +24,24 @@ let mainTitle = document.querySelector('#main-title');
 let sidebarTitle = document.querySelector('#side-bar h3')
 let tripsList = document.querySelector('.trips');
 let upcomingTripsBtn = document.querySelector('#upcoming-btn');
-let beginDate, endDate, destinations, user, users, trips;
+let beginDate, beginCalendar, endDate, endCalendar, destinations, user, users, trips;
 
-window.addEventListener("load", () => {
-  retrieveData();
-  createCalendar('begin-date-calendar');
-  createCalendar('end-date-calendar');
-  domscripts.createNumberSelector();
-});
+
+calculate.addEventListener('click', bookNewTrip);
 currentTripsBtn.addEventListener('click', () => toggleMain('Current Trips'));
 newTripsBtn.addEventListener('click', () => toggleMain('Looking for adventure?'));
 pastTripsBtn.addEventListener('click', () => toggleMain('Past Trips'));
 upcomingTripsBtn.addEventListener('click', () => toggleMain('Upcoming Trips'));
+window.addEventListener("load", () => {
+  retrieveData();
+  let startDate = new Date();
+  startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  beginCalendar = createCalendar('begin-date-calendar', startDate);
+  endCalendar = createCalendar('end-date-calendar', time.daysFromDate(startDate, 7));
+  changeDate(startDate, 'begin-date-calendar');
+  changeDate(time.daysFromDate(startDate, 7), 'end-date-calendar');
+  domscripts.createNumberSelector();
+});
 
 function retrieveData() {
   goFetch.getServerData()
@@ -56,21 +61,24 @@ function generateUser() {
   console.log(user)
 }
 
-function createCalendar(nodeID) {
+
+function createCalendar(nodeID, date) {
   let node = document.querySelector(`#${nodeID}`);
   console.log(node)
-  flatpickr(node, {
-    defaultDate: 'today',
+  return flatpickr(node, {
+    defaultDate: date,
+    minDate: new Date(),
     onChange: ([date]) => changeDate(date, nodeID)
   });
-  changeDate(new Date(), nodeID);
 }
 
 function changeDate(newDate, nodeID) {
-  console.log(typeof(newDate));
-  nodeID[0] === 'b' ? beginDate = newDate : endDate = newDate;
-  console.log(nodeID)
-  console.log(beginDate, endDate)
+  if (nodeID[0] === 'b') {
+    beginDate = newDate;
+  } else {
+    endDate = newDate;
+    endCalendar.minDate = newDate;
+  }
   document.querySelector(`#${nodeID} time`).innerText = newDate.toString().slice(0, 15);
 }
 
@@ -86,9 +94,9 @@ function toggleMain(titleText) {
 }
 
 function displayTrips(folioFunction) {
-  let trips = user.folio[folioFunction](new Date()).data;
+  let tripsToShow = user.folio[folioFunction](new Date()).data;
   tripsList.innerHTML = '';
-  trips.forEach(trip => tripsList.innerHTML += domscripts.createTripCard(trip));
+  tripsToShow.forEach(trip => tripsList.innerHTML += domscripts.createTripCard(trip));
   bookingForm.classList.add('hidden');
   tripsList.classList.remove('hidden');
 }
@@ -96,6 +104,18 @@ function displayTrips(folioFunction) {
 function displayBookingForm() {
   bookingForm.classList.remove('hidden');
   tripsList.classList.add('hidden');
+}
+
+function bookNewTrip() {
+  let destID = document.querySelector('#destinations').value;
+  let countPeople = document.querySelector('#number-of-people').value;
+  let duration = time.daysBetween(beginDate, endDate);
+  if (duration < 1)  alert('Trip must be at least 1 day long!');
+  else {
+  console.log(trips.getNewTripID(), user.id, destID, countPeople, beginDate, duration)
+  // domscripts.postNewTripRequest(trips.getNewID(), user.id, destID, countPeople, beginDate, duration);
+  }
+
 }
 
 function getRandomIndex( arr ) {
