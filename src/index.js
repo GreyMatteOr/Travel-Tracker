@@ -13,7 +13,6 @@ import Destination from './Destination.js'
 import TripRepo from '../src/TripRepo.js';
 import time from './time.js';
 
-
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/GV-logo.png';
 let bookingForm = document.querySelector('.book-trip-form');
@@ -61,6 +60,7 @@ function generateUser() {
   user.folio = trips.getFolioByUser(user.id);
   console.log(user)
 }
+
 
 function createCalendar(nodeID, date) {
   let node = document.querySelector(`#${nodeID}`);
@@ -115,6 +115,7 @@ function bookNewTrip() {
   console.log(trips.getNewTripID(), user.id, destID, countPeople, beginDate, duration)
   // domscripts.postNewTripRequest(trips.getNewID(), user.id, destID, countPeople, beginDate, duration);
   }
+
 }
 
 function getRandomIndex( arr ) {
