@@ -49,7 +49,7 @@ describe('TripRepo', () => {
     });
   });
 
-  describe.only('getPastFolio', () => {
+  describe('getPastFolio', () => {
 
     it('should return a new TripRepo of all the trips that have ended already', () => {
 
@@ -61,7 +61,7 @@ describe('TripRepo', () => {
     });
   });
 
-  describe.only('getCurrentFolio', () => {
+  describe('getCurrentFolio', () => {
 
     it('should return a new TripRepo of all the trips that have ended already', () => {
 
@@ -79,7 +79,7 @@ describe('TripRepo', () => {
     });
   });
 
-  describe.only('getUpcomingFolio', () => {
+  describe('getUpcomingFolio', () => {
 
     it('should return a new TripRepo of all the trips that have ended already', () => {
 

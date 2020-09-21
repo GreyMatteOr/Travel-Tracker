@@ -34,10 +34,7 @@ class TripRepo {
   }
 
   getCurrentFolio(date) {
-    return new TripRepo(this.data.filter(trip => {
-      let endDate = time.daysFromDate(trip.date, trip.duration);
-      return time.isBetween(trip.date, date, endDate);
-    }), null, false);
+    return new TripRepo(this.data.filter(trip => trip.isCurrent(date)), null, false);
   }
 }
 

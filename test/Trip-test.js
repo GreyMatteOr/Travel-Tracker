@@ -57,7 +57,7 @@ describe('Trip', () => {
   describe('getName()', () => {
 
     it('should return the name of the destination', () => {
-      trip.destination = {destination: 'Paris'};
+      trip.destination = {name: 'Paris'};
 
       expect(trip.getName()).to.equal('Paris');
     });
