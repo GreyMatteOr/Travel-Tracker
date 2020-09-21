@@ -18,12 +18,17 @@ describe('time', () => {
 
   describe('daysBetween()', () => {
 
-    it('should return the whole number of days between 2 given Dates', () => {
+    it('should return the number of days between 2 given Dates', () => {
 
       expect(time.daysBetween(dayBefore, date)).to.equal(1);
-      expect(time.daysBetween(date, dayBefore)).to.equal(1);
       expect(time.daysBetween(dayBefore, dayAfter)).to.equal(2);
       expect(time.daysBetween(date, date)).to.equal(0);
+    });
+
+    it('should return be negative if the a Date of days between 2 given Dates', () => {
+
+      expect(time.daysBetween(date, dayBefore)).to.equal(-1);
+      expect(time.daysBetween(dayAfter, dayBefore)).to.equal(-2);
     });
   });
 
