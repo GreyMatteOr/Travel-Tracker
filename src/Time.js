@@ -5,7 +5,7 @@ let time = {
   },
 
   daysBetween(date1, date2) {
-    let mSeconds = Math.abs(date1.getTime() - date2.getTime());
+    let mSeconds = date2.getTime() - date1.getTime();
     return Math.ceil(mSeconds / 24 / 60 / 60 / 1000);
   },
 
