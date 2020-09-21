@@ -19,7 +19,7 @@ let domscripts = {
   createDestinationsSelection(destinations) {
     let select = document.querySelector('#destinations');
     destinations.forEach(destination  => {
-      select.innerHTML += `<option value='${destination.name}'>${destination.name}</option>`
+      select.innerHTML += `<option value='${destination.id}'>${destination.name}</option>`
     });
   },
 

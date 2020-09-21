@@ -11,13 +11,13 @@ import User from './User.js'
 import Trip from './Trip.js'
 import Destination from './Destination.js'
 import TripRepo from '../src/TripRepo.js';
-
-
+import time from './time.js';
 
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/GV-logo.png';
 let bookingForm = document.querySelector('.book-trip-form');
+let calculate = document.querySelector('#calculate');
 let currentTripsBtn = document.querySelector('#current-btn');
 let newTripsBtn = document.querySelector('#book-trip-btn');
 let pastTripsBtn = document.querySelector('#past-btn');
@@ -33,6 +33,7 @@ window.addEventListener("load", () => {
   createCalendar('end-date-calendar');
   domscripts.createNumberSelector();
 });
+calculate.addEventListener('click', bookNewTrip);
 currentTripsBtn.addEventListener('click', () => toggleMain('Current Trips'));
 newTripsBtn.addEventListener('click', () => toggleMain('Looking for adventure?'));
 pastTripsBtn.addEventListener('click', () => toggleMain('Past Trips'));
@@ -86,9 +87,9 @@ function toggleMain(titleText) {
 }
 
 function displayTrips(folioFunction) {
-  let trips = user.folio[folioFunction](new Date()).data;
+  let tripsToShow = user.folio[folioFunction](new Date()).data;
   tripsList.innerHTML = '';
-  trips.forEach(trip => tripsList.innerHTML += domscripts.createTripCard(trip));
+  tripsToShow.forEach(trip => tripsList.innerHTML += domscripts.createTripCard(trip));
   bookingForm.classList.add('hidden');
   tripsList.classList.remove('hidden');
 }
@@ -96,6 +97,14 @@ function displayTrips(folioFunction) {
 function displayBookingForm() {
   bookingForm.classList.remove('hidden');
   tripsList.classList.add('hidden');
+}
+
+function bookNewTrip() {
+  let destID = document.querySelector('#destinations').value;
+  let countPeople = document.querySelector('#number-of-people').value;
+  let duration = time.daysBetween(beginDate, endDate);
+  console.log(trips.getNewID(), user.id, destID, countPeople, beginDate, duration)
+  // domscripts.postNewTripRequest(trips.getNewID(), user.id, destID, countPeople, beginDate, duration);
 }
 
 function getRandomIndex( arr ) {
