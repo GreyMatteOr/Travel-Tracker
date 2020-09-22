@@ -50,13 +50,6 @@ function retrieveData() {
   .then(([u, t, d]) => {
     destinations = d.destinations.map(dData => new Destination(dData));
     trips = new TripRepo(t.trips, destinations);
-    // trips.data.forEach(trip => {
-    //   if(trip.id > 1000) {
-    //     goFetch.deleteTripRequest(trip.id)
-    //     .then(() => console.log(trip.id))
-    //     .catch(err => console.log(err))
-    //   }
-    // })
     users = u.travelers;
     generateUser();
     domscripts.createDestinationsSelection(destinations);
@@ -104,6 +97,7 @@ function displayTrips(folioFunction) {
   let tripsToShow = user.folio[folioFunction](new Date()).data;
   let isUpcoming = folioFunction[3] === 'U';
   tripsList.innerHTML = '';
+  document.querySelector('#cost').innerHTML = domscripts.createCostSummary(tripsToShow, user);
   tripsToShow.forEach(trip => tripsList.innerHTML += domscripts.createTripCard(trip, isUpcoming));
   bookingForm.classList.add('hidden');
   tripsList.classList.remove('hidden');
@@ -125,6 +119,7 @@ function destroyCard(event) {
     targetOfDestruction.remove();
     trips.deleteTripByID(+tripID);
     user.folio.deleteTripByID(+tripID);
+    displayTrips('getUpcomingFolio');
   })
   .catch(err => console.log(err));
 }
