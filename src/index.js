@@ -80,6 +80,8 @@ function changeDate(newDate, nodeID) {
     endDate = newDate;
   }
   document.querySelector(`#${nodeID} time`).innerText = newDate.toString().slice(0, 15);
+  userTrip = {};
+  setBookTripBtnStatus(userTrip);
 }
 
 function toggleMain(titleText) {
@@ -144,8 +146,8 @@ function calculateCosts() {
     duration: time.daysBetween(beginDate, endDate)
   });
   userTrip.destination = dest;
-  domscripts.setCostDisplay(userTrip);
-  setBookTripBtnStatus(userTrip);
+  if (!setBookTripBtnStatus(userTrip)) domscripts.setCostDisplay(userTrip);
+  else domscripts.clearCostDisplay();
 }
 
 function bookNewTrip() {
@@ -153,13 +155,15 @@ function bookNewTrip() {
   .then(() => {
     trips.addNewTrip(userTrip);
     user.folio.addNewTrip(userTrip);
+    alert(`Booked!\n\nYou're going to ${userTrip.getName()} on ${time.createYYYYMMDD(userTrip.date)}!\n\nIf you'd like to cancel at any point, just head over to the upcoming trips tab and hit 'cancel' at any point until the day of your trip.`)
     userTrip = {};
   })
   .catch(response => console.log(response));
 }
 
 function setBookTripBtnStatus(trip) {
-  bookTripBtn.disabled = (
+  bookTripBtn.innerText = (trip.duration < 1 ? 'Trip must be at least 1 day long' : 'Book me!');
+  return bookTripBtn.disabled = (
     trip.id === undefined ||
     trip.userID === undefined ||
     trip.destinationID === undefined ||
@@ -167,8 +171,9 @@ function setBookTripBtnStatus(trip) {
     trip.status === undefined ||
     trip.suggestedActivities === undefined ||
     trip.date === undefined ||
-    trip.duration === undefined
-  )
+    trip.duration === undefined ||
+    trip.duration < 1
+  );
 }
 
 function getRandomIndex( arr ) {

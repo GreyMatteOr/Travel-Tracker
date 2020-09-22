@@ -42,6 +42,12 @@ let domscripts = {
     document.querySelector('#total').innerText = `   total: $${trip.getBaseCost() + trip.getAgentCost()}`;
   },
 
+  clearCostDisplay() {
+    document.querySelector('#base-cost').innerText = ``;
+    document.querySelector('#agent-cost').innerText = ``;
+    document.querySelector('#total').innerText = ``;
+  },
+
   createCostSummary(shownTrips, user) {
     let shownTripsCost = shownTrips.reduce((sum, trip) => sum + trip.getBaseCost() + trip.getAgentCost(), 0);
     return `
