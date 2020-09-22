@@ -9,7 +9,6 @@ class TripRepo {
         trip.destination = destinations.find(dest => dest.id === trip.destinationID);
         return trip;
       });
-      this.data.sort((a, b) => a.localCompare(b));
     } else this.data = data;
     this.countIDs();
   }
@@ -54,6 +53,18 @@ class TripRepo {
       memory[trip.id] = trip;
       return memory;
     }, {})
+  }
+
+  addNewTrip(trip) {
+    this.data.push(trip);
+    this.tripIDs[trip.id] = trip;
+  }
+
+  deleteTripByID(tripID) {
+    let tripIndex = this.data.findIndex(trip => trip.id == tripID);
+    this.data.splice(tripIndex, 1);
+    this.tripIDs[tripID] = undefined;
+    console.log(this.tripIDs)
   }
 }
 
