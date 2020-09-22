@@ -22,28 +22,53 @@ let currentTripsBtn = document.querySelector('#current-btn');
 let newTripsBtn = document.querySelector('#book-trip-btn');
 let pastTripsBtn = document.querySelector('#past-btn');
 let mainTitle = document.querySelector('#main-title');
-let sidebarTitle = document.querySelector('#side-bar h3')
+let sidebarTitle = document.querySelector('#side-bar h3');
+let submitCredentials = document.querySelector('#submit-credentials');
 let tripsList = document.querySelector('.trips');
 let upcomingTripsBtn = document.querySelector('#upcoming-btn');
-let beginDate, beginCalendar, endDate, endCalendar, destinations, user, users, userTrip = {}, trips;
+let beginDate, beginCalendar, endDate, endCalendar, destinations, user, userID, users, userTrip = {}, trips;
 
 bookTripBtn.addEventListener('click', bookNewTrip);
 calculate.addEventListener('click', calculateCosts);
 currentTripsBtn.addEventListener('click', () => toggleMain('Current Trips'));
 newTripsBtn.addEventListener('click', () => toggleMain('Looking for adventure?'));
 pastTripsBtn.addEventListener('click', () => toggleMain('Past Trips'));
+submitCredentials.addEventListener('click', testLogin);
 upcomingTripsBtn.addEventListener('click', () => toggleMain('Upcoming Trips'));
-window.addEventListener("load", () => {
+
+function testLogin() {
+  if (document.querySelector('#pw').value === 'travel2020') {
+    userID = parseInt(document.querySelector('#userID').value.slice(-2));
+    goFetch.getUser(userID)
+    .then(response => {
+      if (+response.status < 400) {
+        loadPage();
+        document.querySelector('.login').remove();
+      } else {
+        document.querySelector('#warning').innerText = 'Username and/or password were incorrect.'
+      }
+    })
+    .catch(err => document.querySelector('#warning').innerText = 'Something misbehaved. Refresh the page and try again later.');
+  } else {
+    document.querySelector('#warning').innerText = 'Username and/or password were incorrect.';
+  }
+}
+
+function loadPage() {
   retrieveData();
-  let startDate = new Date();
-  startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  loadCalendars();
+  domscripts.createNumberSelector();
+}
+
+function loadCalendars() {
+  let [year, month, day] = time.createYYYYMMDD(new Date()).split('/');
+  let startDate = new Date(+year, +month - 1, +day);
   startDate = time.daysFromDate(startDate, 1);
   beginCalendar = createCalendar('begin-date-calendar', startDate);
   endCalendar = createCalendar('end-date-calendar', time.daysFromDate(startDate, 7));
   changeDate(startDate, 'begin-date-calendar');
   changeDate(time.daysFromDate(startDate, 7), 'end-date-calendar');
-  domscripts.createNumberSelector();
-});
+}
 
 function retrieveData() {
   goFetch.getServerData()
@@ -58,7 +83,9 @@ function retrieveData() {
 }
 
 function generateUser() {
-  user = new User (users[getRandomIndex(users)]);
+  let uData = users.find(user => user.id === userID)
+  user = new User(uData);
+  console.log(user)
   user.folio = trips.getFolioByUser(user.id);
   let welcomeMsgNode = document.querySelector('#welcome-msg')
   welcomeMsgNode.innerText = `Welcome, ${user.name}!`;
@@ -151,14 +178,26 @@ function calculateCosts() {
 }
 
 function bookNewTrip() {
+  domscripts.clearCostDisplay();
   goFetch.postNewTripRequest(userTrip)
-  .then(() => {
-    trips.addNewTrip(userTrip);
-    user.folio.addNewTrip(userTrip);
-    alert(`Booked!\n\nYou're going to ${userTrip.getName()} on ${time.createYYYYMMDD(userTrip.date)}!\n\nIf you'd like to cancel at any point, just head over to the upcoming trips tab and hit 'cancel' at any point until the day of your trip.`)
-    userTrip = {};
+  .then(response => {
+    if(response.status < 400) success();
+    else {
+      alert('Looks like something when wrong! Please refresh the page and try again later.')
+    }
   })
-  .catch(response => console.log(response));
+  .catch(response => {
+    document.querySelector('#base-cost').innerText = `Looks like something went wrong... Refresh the page and try again, or give us a call.`;
+  });
+}
+
+function success() {
+  trips.addNewTrip(userTrip);
+  user.folio.addNewTrip(userTrip);
+  alert(`Booked!\n\nYou're going to ${userTrip.getName()} on ${time.createYYYYMMDD(userTrip.date)}!\n\nIf you'd like to cancel at any point, just head over to the upcoming trips tab and hit 'cancel' at any point until the day of your trip.`);
+  document.querySelector('#base-cost').innerText = `Success! See you in ${userTrip.getName().split('.')[0]}!`;
+  userTrip = {};
+  setBookTripBtnStatus(userTrip);
 }
 
 function setBookTripBtnStatus(trip) {
