@@ -120,4 +120,27 @@ describe('TripRepo', () => {
       expect(repo.tripIDs).to.deep.equal({1: trip, 5:newTrip});
     });
   });
+
+  describe('deleteTripByID', () => {
+
+    it('should remove a Trip object from the data', () => {
+
+      let newTrip = {id: 5};
+      repo.addNewTrip(newTrip);
+      expect(repo.data).to.deep.equal([trip, newTrip]);
+
+      repo.deleteTripByID(5);
+      expect(repo.data).to.deep.equal([trip]);
+    });
+
+    it('should set the ID in the ID inventory to undefined', () => {
+
+      let newTrip = {id: 5};
+      repo.addNewTrip(newTrip);
+      expect(repo.tripIDs).to.deep.equal({1: trip, 5:newTrip});
+
+      repo.deleteTripByID(5);
+      expect(repo.tripIDs).to.deep.equal({1: trip, 5:undefined});
+    });
+  });
 });
