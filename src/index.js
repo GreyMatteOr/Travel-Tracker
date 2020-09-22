@@ -50,13 +50,6 @@ function retrieveData() {
   .then(([u, t, d]) => {
     destinations = d.destinations.map(dData => new Destination(dData));
     trips = new TripRepo(t.trips, destinations);
-    // trips.data.forEach(trip => {
-    //   if(trip.id > 1000) {
-    //     goFetch.deleteTripRequest(trip.id)
-    //     .then(() => console.log(trip.id))
-    //     .catch(err => console.log(err))
-    //   }
-    // })
     users = u.travelers;
     generateUser();
     domscripts.createDestinationsSelection(destinations);
@@ -87,6 +80,8 @@ function changeDate(newDate, nodeID) {
     endDate = newDate;
   }
   document.querySelector(`#${nodeID} time`).innerText = newDate.toString().slice(0, 15);
+  userTrip = {};
+  setBookTripBtnStatus(userTrip);
 }
 
 function toggleMain(titleText) {
@@ -104,6 +99,7 @@ function displayTrips(folioFunction) {
   let tripsToShow = user.folio[folioFunction](new Date()).data;
   let isUpcoming = folioFunction[3] === 'U';
   tripsList.innerHTML = '';
+  document.querySelector('#cost').innerHTML = domscripts.createCostSummary(tripsToShow, user);
   tripsToShow.forEach(trip => tripsList.innerHTML += domscripts.createTripCard(trip, isUpcoming));
   bookingForm.classList.add('hidden');
   tripsList.classList.remove('hidden');
@@ -125,6 +121,7 @@ function destroyCard(event) {
     targetOfDestruction.remove();
     trips.deleteTripByID(+tripID);
     user.folio.deleteTripByID(+tripID);
+    displayTrips('getUpcomingFolio');
   })
   .catch(err => console.log(err));
 }
@@ -149,8 +146,8 @@ function calculateCosts() {
     duration: time.daysBetween(beginDate, endDate)
   });
   userTrip.destination = dest;
-  domscripts.setCostDisplay(userTrip);
-  setBookTripBtnStatus(userTrip);
+  if (!setBookTripBtnStatus(userTrip)) domscripts.setCostDisplay(userTrip);
+  else domscripts.clearCostDisplay();
 }
 
 function bookNewTrip() {
@@ -158,13 +155,15 @@ function bookNewTrip() {
   .then(() => {
     trips.addNewTrip(userTrip);
     user.folio.addNewTrip(userTrip);
+    alert(`Booked!\n\nYou're going to ${userTrip.getName()} on ${time.createYYYYMMDD(userTrip.date)}!\n\nIf you'd like to cancel at any point, just head over to the upcoming trips tab and hit 'cancel' at any point until the day of your trip.`)
     userTrip = {};
   })
   .catch(response => console.log(response));
 }
 
 function setBookTripBtnStatus(trip) {
-  bookTripBtn.disabled = (
+  bookTripBtn.innerText = (trip.duration < 1 ? 'Trip must be at least 1 day long' : 'Book me!');
+  return bookTripBtn.disabled = (
     trip.id === undefined ||
     trip.userID === undefined ||
     trip.destinationID === undefined ||
@@ -172,8 +171,9 @@ function setBookTripBtnStatus(trip) {
     trip.status === undefined ||
     trip.suggestedActivities === undefined ||
     trip.date === undefined ||
-    trip.duration === undefined
-  )
+    trip.duration === undefined ||
+    trip.duration < 1
+  );
 }
 
 function getRandomIndex( arr ) {

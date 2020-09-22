@@ -9,7 +9,7 @@ let domscripts = {
         <img src='${trip.destination.image}' alt='${trip.destination.alt}'/>
         <div class='card-text'>
           <h1 class='main-font'>${trip.getName()}</h1>
-          <h3 class='main-font'>Flights and lodging for: ${trip.travelers}</h3>
+          <h3 class='main-font'>Flights and lodging for: ${trip.travelers} ($${trip.getBaseCost() + trip.getAgentCost()})</h3>
           <h3 class='main-font'>Departure Date: ${start}</h3>
           <h3 class='main-font'>Return Date: ${end}</h3>
           ${isUpcoming
@@ -40,6 +40,20 @@ let domscripts = {
     document.querySelector('#base-cost').innerText = `Est. base cost: $${trip.getBaseCost()}`;
     document.querySelector('#agent-cost').innerText = `+assorted fees: $${trip.getAgentCost()}`;
     document.querySelector('#total').innerText = `   total: $${trip.getBaseCost() + trip.getAgentCost()}`;
+  },
+
+  clearCostDisplay() {
+    document.querySelector('#base-cost').innerText = ``;
+    document.querySelector('#agent-cost').innerText = ``;
+    document.querySelector('#total').innerText = ``;
+  },
+
+  createCostSummary(shownTrips, user) {
+    let shownTripsCost = shownTrips.reduce((sum, trip) => sum + trip.getBaseCost() + trip.getAgentCost(), 0);
+    return `
+      <h3>Cost of shown Trips: $${shownTripsCost}</h3>
+      <h3>Total spent on trips this year: $${user.getTotalCost(new Date().getFullYear())}</h3>
+    `;
   }
 }
 

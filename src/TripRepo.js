@@ -64,7 +64,6 @@ class TripRepo {
     let tripIndex = this.data.findIndex(trip => trip.id == tripID);
     this.data.splice(tripIndex, 1);
     this.tripIDs[tripID] = undefined;
-    console.log(this.tripIDs)
   }
 }
 
