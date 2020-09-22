@@ -178,19 +178,26 @@ function calculateCosts() {
 }
 
 function bookNewTrip() {
+  domscripts.clearCostDisplay();
   goFetch.postNewTripRequest(userTrip)
   .then(response => {
-    if(response.status < 400){
-      trips.addNewTrip(userTrip);
-      user.folio.addNewTrip(userTrip);
-      alert(`Booked!\n\nYou're going to ${userTrip.getName()} on ${time.createYYYYMMDD(userTrip.date)}!\n\nIf you'd like to cancel at any point, just head over to the upcoming trips tab and hit 'cancel' at any point until the day of your trip.`)
-      userTrip = {};
-    } else {
-      console.log(response)
+    if(response.status < 400) success();
+    else {
       alert('Looks like something when wrong! Please refresh the page and try again later.')
     }
   })
-  .catch(response => console.log(response));
+  .catch(response => {
+    document.querySelector('#base-cost').innerText = `Looks like something went wrong... Refresh the page and try again, or give us a call.`;
+  });
+}
+
+function success() {
+  trips.addNewTrip(userTrip);
+  user.folio.addNewTrip(userTrip);
+  alert(`Booked!\n\nYou're going to ${userTrip.getName()} on ${time.createYYYYMMDD(userTrip.date)}!\n\nIf you'd like to cancel at any point, just head over to the upcoming trips tab and hit 'cancel' at any point until the day of your trip.`);
+  document.querySelector('#base-cost').innerText = `Success! See you in ${userTrip.getName().split('.')[0]}!`;
+  userTrip = {};
+  setBookTripBtnStatus(userTrip);
 }
 
 function setBookTripBtnStatus(trip) {
