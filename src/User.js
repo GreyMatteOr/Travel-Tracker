@@ -15,7 +15,7 @@ class User {
   }
 
   getTotalYearStat(year, funcName) {
-    return this.folio.reduce((total, trip) => {
+    return this.folio.data.reduce((total, trip) => {
       if(trip.getYear() === year) total += trip[funcName]();
       return total;
     }, 0);

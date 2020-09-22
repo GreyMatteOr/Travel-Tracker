@@ -2,7 +2,7 @@ import Trip from '../src/Trip.js';
 import time from '../src/time.js';
 
 class TripRepo {
-  constructor(data, destinations, isNew = true) {
+  constructor(data, destinations = [], isNew = true) {
     if (isNew) {
       this.data = data.map(tripInfo => {
         let trip = new Trip(tripInfo);
@@ -10,6 +10,7 @@ class TripRepo {
         return trip;
       });
     } else this.data = data;
+    this.countIDs();
   }
 
   getFolioByUser(id) {
@@ -35,6 +36,34 @@ class TripRepo {
 
   getCurrentFolio(date) {
     return new TripRepo(this.data.filter(trip => trip.isCurrent(date)), null, false);
+  }
+
+  getNewTripID() {
+    for(let i = 0; i < this.data.length; i++) {
+      let newIDLow = this.data[i].id - 1;
+      if (this.tripIDs[newIDLow] === undefined && newIDLow > 0) return newIDLow;
+      let newIDHigh = this.data[i].id + 1;
+      if (this.tripIDs[newIDHigh] === undefined) return newIDHigh;
+    }
+    throw 'Corrupted ID Inventory Object'
+  }
+
+  countIDs() {
+    this.tripIDs = this.data.reduce((memory, trip) => {
+      memory[trip.id] = trip;
+      return memory;
+    }, {})
+  }
+
+  addNewTrip(trip) {
+    this.data.push(trip);
+    this.tripIDs[trip.id] = trip;
+  }
+
+  deleteTripByID(tripID) {
+    let tripIndex = this.data.findIndex(trip => trip.id == tripID);
+    this.data.splice(tripIndex, 1);
+    this.tripIDs[tripID] = undefined;
   }
 }
 

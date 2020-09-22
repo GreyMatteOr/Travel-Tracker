@@ -19,6 +19,16 @@ let time = {
 
   isAfter(test, reference) {
     return test.getTime() > reference.getTime();
+  },
+
+  createYYYYMMDD(date) {
+    let year = String(date.getFullYear());
+    let month = String(date.getMonth() + 1);
+    let day = String(date.getDate());
+    while(year.length < 4) year = `0${year}`;
+    while(month.length < 2) month = `0${month}`;
+    while(day.length < 2) day = `0${day}`;
+    return [year, month, day].join('/');
   }
 }
 
