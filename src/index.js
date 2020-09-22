@@ -50,6 +50,13 @@ function retrieveData() {
   .then(([u, t, d]) => {
     destinations = d.destinations.map(dData => new Destination(dData));
     trips = new TripRepo(t.trips, destinations);
+    // trips.data.forEach(trip => {
+    //   if(trip.id > 1000) {
+    //     goFetch.deleteTripRequest(trip.id)
+    //     .then(() => console.log(trip.id))
+    //     .catch(err => console.log(err))
+    //   }
+    // })
     users = u.travelers;
     generateUser();
     domscripts.createDestinationsSelection(destinations);
@@ -124,7 +131,7 @@ function destroyCard(event) {
 
 function displayBookingForm() {
   bookingForm.classList.remove('hidden');
-  tripsList.classList.add('hidden');
+  tripsList.innerHTML = '';
   setBookTripBtnStatus(userTrip);
 }
 

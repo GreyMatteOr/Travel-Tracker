@@ -4,7 +4,7 @@ $primary-background: grey;
 
 html, body {
   height: 100%;
-  width: 100%;
+  width: 100vw;
 }
 
 body {
@@ -52,44 +52,53 @@ body {
     width: 100%;
     grid-row: 2;
     background-color: darkgoldenrod;
-    display: grid;
-    grid-template-columns: max-content auto;
-
-    aside {
-      grid-column: 1;
-      background-color: gold;
-      padding: .75em 1.5em;
-    }
 
     section {
-      grid-column: 2;
-      padding: 2em;
+      .trips {
+        display: flex;
+        flex-direction: row;
+        flex: 1 1 40%;
+        justify-content: space-around;
+        flex-wrap: wrap;
+      }
 
       .trip-card {
-        position: relative;
-        background-color: rgba(255,255,255,.6);
+        display: grid;
+        place-items: center;
+        background-color: rgba(255,255,255,.3);
         box-shadow: 3px 3px 3px #000;
-        border-radius: 2em;
-        height: 200px;
+        height: max-content;
+        width: max-content;
+        margin:1.5em 1.5em;
+        border-radius: 1em;
+        position: relative;
 
         img {
           position: absolute;
-          z-index: 1;
-          left:0;
-          width: auto;
-          height: 200px;
-          border-radius: 2em;
-
+          width: 24em;
+          height: 18em;
+          border-radius: 1em;
         }
 
         .card-text {
-          position: absolute;
-          z-index: 2;
-          top: 0;
-          width: max-content;
-          background-color: rgba(255,255,255,.6);
-          box-shadow: 3px 3px 3px #000;
-          border-radius: 1.5em;
+          color: white;
+          z-index: 1;
+          width: 24em;
+          height: 19em;
+          background-color: rgba(0, 0, 0, .42);
+          text-shadow: #000 3px 3px 3px;
+          border-radius: 1em;
+          padding: 1em;
+          transition-property: background-color;
+          transition-duration: .6s;
+        }
+
+        .card-text:hover {
+          background-color: rgba(165, 165, 165, .65);
+        }
+
+        button {
+          background-color: #fbc;
         }
       }
     }
@@ -97,6 +106,7 @@ body {
 
   footer {
     grid-row: 3;
+    background-color: purple;
   }
 
   .main-font {
@@ -118,6 +128,11 @@ body {
   button {
     border-radius: .325em;
     padding: .25em;
+  }
+
+  #submit-booking {
+    background-color: rgba(94, 239, 158, .64);
+    margin-bottom: 1.5em;
   }
 
   .hidden {
