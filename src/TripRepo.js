@@ -9,7 +9,6 @@ class TripRepo {
         trip.destination = destinations.find(dest => dest.id === trip.destinationID);
         return trip;
       });
-      this.data.sort((a, b) => a.localCompare(b));
     } else this.data = data;
     this.countIDs();
   }

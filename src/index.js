@@ -15,6 +15,7 @@ import time from './time.js';
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/GV-logo.png';
+let bookTripBtn = document.querySelector('#submit-booking');
 let bookingForm = document.querySelector('.book-trip-form');
 let calculate = document.querySelector('#calculate');
 let currentTripsBtn = document.querySelector('#current-btn');
@@ -24,10 +25,10 @@ let mainTitle = document.querySelector('#main-title');
 let sidebarTitle = document.querySelector('#side-bar h3')
 let tripsList = document.querySelector('.trips');
 let upcomingTripsBtn = document.querySelector('#upcoming-btn');
-let beginDate, beginCalendar, endDate, endCalendar, destinations, user, users, trips;
+let beginDate, beginCalendar, endDate, endCalendar, destinations, user, users, userTrip = {}, trips;
 
-
-calculate.addEventListener('click', bookNewTrip);
+bookTripBtn.addEventListener('click', bookNewTrip);
+calculate.addEventListener('click', calculateCosts);
 currentTripsBtn.addEventListener('click', () => toggleMain('Current Trips'));
 newTripsBtn.addEventListener('click', () => toggleMain('Looking for adventure?'));
 pastTripsBtn.addEventListener('click', () => toggleMain('Past Trips'));
@@ -58,13 +59,11 @@ function retrieveData() {
 function generateUser() {
   user = new User (users[getRandomIndex(users)]);
   user.folio = trips.getFolioByUser(user.id);
-  console.log(user)
 }
 
 
 function createCalendar(nodeID, date) {
   let node = document.querySelector(`#${nodeID}`);
-  console.log(node)
   return flatpickr(node, {
     defaultDate: date,
     minDate: new Date(),
@@ -104,18 +103,43 @@ function displayTrips(folioFunction) {
 function displayBookingForm() {
   bookingForm.classList.remove('hidden');
   tripsList.classList.add('hidden');
+  validateTrip(userTrip);
+}
+
+function calculateCosts() {
+  let destID = document.querySelector('#destinations').value
+  let dest = destinations.find(destination => destination.id === +destID);
+  userTrip = new Trip({
+    id: trips.getNewTripID(),
+    userID: user.id,
+    destinationID: +destID,
+    travelers: +(document.querySelector('#number-of-people').value),
+    status: 'pending',
+    suggestedActivities: [],
+    date: beginDate,
+    duration: time.daysBetween(beginDate, endDate)
+  });
+  userTrip.destination = dest;
+  validateTrip(userTrip);
 }
 
 function bookNewTrip() {
-  let destID = document.querySelector('#destinations').value;
-  let countPeople = document.querySelector('#number-of-people').value;
-  let duration = time.daysBetween(beginDate, endDate);
-  if (duration < 1)  alert('Trip must be at least 1 day long!');
-  else {
-  console.log(trips.getNewTripID(), user.id, destID, countPeople, beginDate, duration)
-  // domscripts.postNewTripRequest(trips.getNewID(), user.id, destID, countPeople, beginDate, duration);
-  }
+  goFetch.postNewTripRequest(userTrip)
+  .then(response => console.log(response))
+  .catch(response => console.log(response));
+}
 
+function validateTrip(trip) {
+  bookTripBtn.disabled = (
+    trip.id === undefined ||
+    trip.userID === undefined ||
+    trip.destinationID === undefined ||
+    trip.travelers === undefined ||
+    trip.status === undefined ||
+    trip.suggestedActivities === undefined ||
+    trip.date === undefined ||
+    trip.duration === undefined
+  )
 }
 
 function getRandomIndex( arr ) {

@@ -4,7 +4,7 @@ import Trip from '../src/Trip.js';
 import TripRepo from '../src/TripRepo.js';
 
 
-describe.only('TripRepo', () => {
+describe('TripRepo', () => {
   let data, repo, trip;
 
   beforeEach(() => {
