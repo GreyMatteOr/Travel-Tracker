@@ -27,6 +27,12 @@ let domscripts = {
   createNumberSelector() {
     let select = document.querySelector('#number-of-people');
     for(let i = 1; i <= 20; i++) select.innerHTML += `<option value='${i}'>${i}</option>`;
+  },
+
+  setCostDisplay(trip) {
+    document.querySelector('#base-cost').innerText = `Est. base cost: $${trip.getBaseCost()}`;
+    document.querySelector('#agent-cost').innerText = `+assorted fees: $${trip.getAgentCost()}`;
+    document.querySelector('#total').innerText = `   total: $${trip.getBaseCost() + trip.getAgentCost()}`;
   }
 }
 

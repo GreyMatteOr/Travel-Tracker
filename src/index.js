@@ -37,6 +37,7 @@ window.addEventListener("load", () => {
   retrieveData();
   let startDate = new Date();
   startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  startDate = time.daysFromDate(startDate, 1);
   beginCalendar = createCalendar('begin-date-calendar', startDate);
   endCalendar = createCalendar('end-date-calendar', time.daysFromDate(startDate, 7));
   changeDate(startDate, 'begin-date-calendar');
@@ -59,14 +60,15 @@ function retrieveData() {
 function generateUser() {
   user = new User (users[getRandomIndex(users)]);
   user.folio = trips.getFolioByUser(user.id);
+  let welcomeMsgNode = document.querySelector('#welcome-msg')
+  welcomeMsgNode.innerText = `Welcome, ${user.name}!`;
 }
-
 
 function createCalendar(nodeID, date) {
   let node = document.querySelector(`#${nodeID}`);
   return flatpickr(node, {
     defaultDate: date,
-    minDate: new Date(),
+    minDate: date,
     onChange: ([date]) => changeDate(date, nodeID)
   });
 }
@@ -76,7 +78,6 @@ function changeDate(newDate, nodeID) {
     beginDate = newDate;
   } else {
     endDate = newDate;
-    endCalendar.minDate = newDate;
   }
   document.querySelector(`#${nodeID} time`).innerText = newDate.toString().slice(0, 15);
 }
@@ -103,11 +104,11 @@ function displayTrips(folioFunction) {
 function displayBookingForm() {
   bookingForm.classList.remove('hidden');
   tripsList.classList.add('hidden');
-  validateTrip(userTrip);
+  setBookTripBtnStatus(userTrip);
 }
 
 function calculateCosts() {
-  let destID = document.querySelector('#destinations').value
+  let destID = document.querySelector('#destinations').value;
   let dest = destinations.find(destination => destination.id === +destID);
   userTrip = new Trip({
     id: trips.getNewTripID(),
@@ -120,16 +121,20 @@ function calculateCosts() {
     duration: time.daysBetween(beginDate, endDate)
   });
   userTrip.destination = dest;
-  validateTrip(userTrip);
+  domscripts.setCostDisplay(userTrip);
+  setBookTripBtnStatus(userTrip);
 }
 
 function bookNewTrip() {
   goFetch.postNewTripRequest(userTrip)
-  .then(response => console.log(response))
+  .then(() => {
+    trips.addNewTrip(userTrip);
+    user.folio.addNewTrip(userTrip);
+  })
   .catch(response => console.log(response));
 }
 
-function validateTrip(trip) {
+function setBookTripBtnStatus(trip) {
   bookTripBtn.disabled = (
     trip.id === undefined ||
     trip.userID === undefined ||

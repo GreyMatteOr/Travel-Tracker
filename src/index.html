@@ -9,7 +9,7 @@
 </head>
   <body>
     <header>
-      <h1 class='main-font italic secondary-color' id='welcome-msg'>Welcome, User!</h1>
+      <h1 class='main-font italic secondary-color' id='welcome-msg'></h1>
       <nav>
         <button class='main-font light primary-color' id='past-btn'>Past Trips</button>
         <button class='main-font light primary-color' id='current-btn'>Current Trips</button>
@@ -39,6 +39,10 @@
           <h3>How many people will be on the trip?</h3>
           <select id='number-of-people'></select>
           <button id="calculate">Calculate costs</button>
+          <h4 class='main-font' id='base-cost'></h4>
+          <h4 class='main-font' id='agent-cost'>    +    fees:</h4>
+          <br>
+          <h4 class='main-font' id='total'>             total:</h4>
           <button id="submit-booking">Book me!</button>
         </section>
       </section>

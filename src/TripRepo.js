@@ -54,6 +54,11 @@ class TripRepo {
       return memory;
     }, {})
   }
+
+  addNewTrip(trip) {
+    this.data.push(trip);
+    this.tripIDs[trip.id] = trip;
+  }
 }
 
 export default TripRepo;
