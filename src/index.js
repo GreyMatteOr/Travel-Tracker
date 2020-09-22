@@ -22,28 +22,48 @@ let currentTripsBtn = document.querySelector('#current-btn');
 let newTripsBtn = document.querySelector('#book-trip-btn');
 let pastTripsBtn = document.querySelector('#past-btn');
 let mainTitle = document.querySelector('#main-title');
-let sidebarTitle = document.querySelector('#side-bar h3')
+let sidebarTitle = document.querySelector('#side-bar h3');
+let submitCredentials = document.querySelector('#submit-credentials');
 let tripsList = document.querySelector('.trips');
 let upcomingTripsBtn = document.querySelector('#upcoming-btn');
-let beginDate, beginCalendar, endDate, endCalendar, destinations, user, users, userTrip = {}, trips;
+let beginDate, beginCalendar, endDate, endCalendar, destinations, user, userID, users, userTrip = {}, trips;
 
 bookTripBtn.addEventListener('click', bookNewTrip);
 calculate.addEventListener('click', calculateCosts);
 currentTripsBtn.addEventListener('click', () => toggleMain('Current Trips'));
 newTripsBtn.addEventListener('click', () => toggleMain('Looking for adventure?'));
 pastTripsBtn.addEventListener('click', () => toggleMain('Past Trips'));
+submitCredentials.addEventListener('click', () => {
+  if (document.querySelector('#pw').value === 'travel2020') {
+    userID = parseInt(document.querySelector('#userID').value.slice(-2));
+    goFetch.getUser(userID)
+      .then(response => {
+        if (+response.status < 400) {
+          console.log(response, response.status, response.status >= 400)
+          retrieveData();
+          let startDate = new Date();
+          startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+          startDate = time.daysFromDate(startDate, 1);
+          beginCalendar = createCalendar('begin-date-calendar', startDate);
+          endCalendar = createCalendar('end-date-calendar', time.daysFromDate(startDate, 7));
+          changeDate(startDate, 'begin-date-calendar');
+          changeDate(time.daysFromDate(startDate, 7), 'end-date-calendar');
+          domscripts.createNumberSelector();
+          document.querySelector('.login').remove()
+        } else {
+          console.log(response)
+          document.querySelector('#warning').innerText = 'Username and/or password were incorrect.'
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        document.querySelector('#warning').innerText = 'Username and/or password were incorrect.'
+      });
+    } else {
+      document.querySelector('#warning').innerText = 'Username and/or password were incorrect.';
+    }
+  })
 upcomingTripsBtn.addEventListener('click', () => toggleMain('Upcoming Trips'));
-window.addEventListener("load", () => {
-  retrieveData();
-  let startDate = new Date();
-  startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-  startDate = time.daysFromDate(startDate, 1);
-  beginCalendar = createCalendar('begin-date-calendar', startDate);
-  endCalendar = createCalendar('end-date-calendar', time.daysFromDate(startDate, 7));
-  changeDate(startDate, 'begin-date-calendar');
-  changeDate(time.daysFromDate(startDate, 7), 'end-date-calendar');
-  domscripts.createNumberSelector();
-});
 
 function retrieveData() {
   goFetch.getServerData()
@@ -58,7 +78,9 @@ function retrieveData() {
 }
 
 function generateUser() {
-  user = new User (users[getRandomIndex(users)]);
+  let uData = users.find(user => user.id === userID)
+  console.log(userID, uData);
+  user = new User(uData);
   user.folio = trips.getFolioByUser(user.id);
   let welcomeMsgNode = document.querySelector('#welcome-msg')
   welcomeMsgNode.innerText = `Welcome, ${user.name}!`;

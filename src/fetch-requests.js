@@ -1,6 +1,11 @@
 import time from './time.js';
 
 let goFetch = {
+  getUser(id) {
+    console.log(id)
+    return fetch(`https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/travelers/travelers/${+id}`);
+  },
+
   postNewTripRequest(trip) {
     let data = {
       id: trip.id,
