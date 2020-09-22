@@ -81,4 +81,13 @@ describe('time', () => {
       expect(time.isAfter(date, date)).to.equal(false);
     });
   });
+
+  describe('createYYYYMMDD', () => {
+
+    it('should return a string of the date in `YYYY/MM/DD format`', () => {
+
+      expect(time.createYYYYMMDD(date)).to.equal('2020/01/01')
+      expect(time.createYYYYMMDD(dayBefore)).to.equal('2019/12/31');
+    });
+  });
 });
