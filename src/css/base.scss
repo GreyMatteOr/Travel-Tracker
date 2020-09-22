@@ -54,8 +54,6 @@ body {
     background-color: darkgoldenrod;
 
     section {
-      // padding: 2em;
-
       .trips {
         display: flex;
         flex-direction: row;
@@ -91,6 +89,12 @@ body {
           text-shadow: #000 3px 3px 3px;
           border-radius: 1em;
           padding: 1em;
+          transition-property: background-color;
+          transition-duration: .6s;
+        }
+
+        .card-text:hover {
+          background-color: rgba(165, 165, 165, .65);
         }
 
         button {
@@ -102,6 +106,7 @@ body {
 
   footer {
     grid-row: 3;
+    background-color: purple;
   }
 
   .main-font {
@@ -123,6 +128,11 @@ body {
   button {
     border-radius: .325em;
     padding: .25em;
+  }
+
+  #submit-booking {
+    background-color: rgba(94, 239, 158, .64);
+    margin-bottom: 1.5em;
   }
 
   .hidden {
