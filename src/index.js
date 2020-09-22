@@ -95,10 +95,31 @@ function toggleMain(titleText) {
 
 function displayTrips(folioFunction) {
   let tripsToShow = user.folio[folioFunction](new Date()).data;
+  let isUpcoming = folioFunction[3] === 'U';
   tripsList.innerHTML = '';
-  tripsToShow.forEach(trip => tripsList.innerHTML += domscripts.createTripCard(trip));
+  tripsToShow.forEach(trip => tripsList.innerHTML += domscripts.createTripCard(trip, isUpcoming));
   bookingForm.classList.add('hidden');
   tripsList.classList.remove('hidden');
+  addEventListenersToButtons();
+}
+
+function addEventListenersToButtons() {
+  let buttons = document.querySelectorAll('.destroy-card');
+  for (let button of buttons) {
+    button.addEventListener('click', destroyCard);
+  }
+}
+
+function destroyCard(event) {
+  let targetOfDestruction = event.target.closest('.trip-card');
+  let tripID = targetOfDestruction.dataset.value;
+  goFetch.deleteTripRequest(+tripID)
+  .then(() => {
+    targetOfDestruction.remove();
+    trips.deleteTripByID(+tripID);
+    user.folio.deleteTripByID(+tripID);
+  })
+  .catch(err => console.log(err));
 }
 
 function displayBookingForm() {
@@ -130,6 +151,7 @@ function bookNewTrip() {
   .then(() => {
     trips.addNewTrip(userTrip);
     user.folio.addNewTrip(userTrip);
+    userTrip = {};
   })
   .catch(response => console.log(response));
 }

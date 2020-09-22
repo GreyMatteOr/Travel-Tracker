@@ -23,6 +23,21 @@ let goFetch = {
     )
   },
 
+  deleteTripRequest(tripID) {
+    let data = {
+      id: tripID,
+    };
+    let update = JSON.stringify(data);
+    return fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips', {
+        method: 'DELETE',
+        body: update,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+  },
+
   getServerData() {
     let uData = fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/travelers/travelers');
     let tData = fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips');
