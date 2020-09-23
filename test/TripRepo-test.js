@@ -54,6 +54,18 @@ describe('TripRepo', () => {
     });
   });
 
+  describe('getUpcomingFolio', () => {
+
+    it('should return a new TripRepo of all the trips that haven\'t started yet', () => {
+
+      let date = new Date(2019, 8, 15);
+      expect(repo.getUpcomingFolio(date)).to.deep.equal(repo);
+
+      let alreadyStarted = new Date(2019, 8, 16);
+      expect(repo.getUpcomingFolio(alreadyStarted)).to.deep.equal(new TripRepo([], []));
+    });
+  });
+
   describe('getPastFolio', () => {
 
     it('should return a new TripRepo of all the trips that have ended already', () => {
@@ -84,23 +96,51 @@ describe('TripRepo', () => {
     });
   });
 
-  describe('getUpcomingFolio', () => {
-
-    it('should return a new TripRepo of all the trips that haven\'t started yet', () => {
-
-      let date = new Date(2019, 8, 15);
-      expect(repo.getUpcomingFolio(date)).to.deep.equal(repo);
-
-      let alreadyStarted = new Date(2019, 8, 16);
-      expect(repo.getUpcomingFolio(alreadyStarted)).to.deep.equal(new TripRepo([], []));
-    });
-  });
-
   describe('getNewTripID', () => {
 
     it('should return a new, unused ID', () => {
 
       expect(repo.getNewTripID()).to.equal(2);
+    });
+  });
+
+  describe('addNewTrip', () => {
+
+    it('should add a Trip object to the data', () => {
+
+      let newTrip = {id: 5};
+      repo.addNewTrip(newTrip);
+      expect(repo.data).to.deep.equal([trip, newTrip]);
+    });
+
+    it('should add a ID in the ID inventory', () => {
+
+      let newTrip = {id: 5};
+      repo.addNewTrip(newTrip);
+      expect(repo.tripIDs).to.deep.equal({1: trip, 5:newTrip});
+    });
+  });
+
+  describe('deleteTripByID', () => {
+
+    it('should remove a Trip object from the data', () => {
+
+      let newTrip = {id: 5};
+      repo.addNewTrip(newTrip);
+      expect(repo.data).to.deep.equal([trip, newTrip]);
+
+      repo.deleteTripByID(5);
+      expect(repo.data).to.deep.equal([trip]);
+    });
+
+    it('should set the ID in the ID inventory to undefined', () => {
+
+      let newTrip = {id: 5};
+      repo.addNewTrip(newTrip);
+      expect(repo.tripIDs).to.deep.equal({1: trip, 5:newTrip});
+
+      repo.deleteTripByID(5);
+      expect(repo.tripIDs).to.deep.equal({1: trip, 5:undefined});
     });
   });
 });

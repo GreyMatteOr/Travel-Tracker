@@ -4,7 +4,7 @@ import User from '../src/User.js';
 import Trip from '../src/Trip.js';
 import TripRepo from '../src/TripRepo.js';
 
-describe.only('User', () => {
+describe('User', () => {
   let uData, user, fdata;
   beforeEach(() => {
     uData = {
