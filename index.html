@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8" name="description" content="A website that helps you book and track trips with a Guvis Travel Agency.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guvis Travel</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="icon" href='./images/GV-logo.png'>
+</head>
+  <body>
+    <section class='main-font login'>
+      <h2 class='secondary-font'>Welcome to GUVIS!</h2>
+      <input id='userID' type="text" name="" placeholder="user-name">
+      <input id='pw' type="password" name="" placeholder="password">
+      <button id="submit-credentials">Submit</button>
+      <h3 id='warning'></h3>
+    </section>
+    <header>
+      <h1 class='main-font italic secondary-color' id='welcome-msg'></h1>
+      <nav>
+        <button class='main-font light primary-color' id='past-btn'>Past Trips</button>
+        <button class='main-font light primary-color' id='current-btn'>Current Trips</button>
+        <button class='main-font light primary-color' id='upcoming-btn'>Upcoming Trips</button>
+        <button class='main-font light primary-color' id='book-trip-btn'>Book with us!</button>
+      </nav>
+      <section id='logo'>
+        <img src='./images/GV-logo.png' alt='The GUVIS Logo'/>
+        <h1 class='secondary-font primary-color'>GUVIS</h1>
+      </section>
+    </header>
+    <main>
+      <section id='trips-display'>
+        <h1 class='main-font italic' id='main-title'>Current Trips</h1>
+        <section class='main-font' id='cost'></section>
+        <section class='trips'></section>
+        <section class='book-trip-form hidden main-font'>
+          <h3>Where would you like to go?</h3>
+          <select class='main-font' id='destinations'></select>
+          <h3>When would you like to depart?</h3>
+          <button class="main-font" id='begin-date-calendar'>
+            <time class='main-font light primary-color'></time>
+          </button>
+          <h3>When would you like to return?</h3>
+          <button class="main-font" id='end-date-calendar'>
+            <time class='main-font light primary-color'></time>
+          </button>
+          <h3>How many people will be on the trip?</h3>
+          <select id='number-of-people'></select>
+          <button class="main-font" id="calculate">Calculate costs</button>
+          <h4 class='main-font' id='base-cost'></h4>
+          <h4 class='main-font' id='agent-cost'></h4>
+          <h4 class='main-font' id='total'></h4>
+          <button class="secondary-font"id="submit-booking">Book me!</button>
+        </section>
+      </section>
+    </main>
+    <footer>
+      <address>
+        <p id='mail-address'>
+        1331 17th Street
+        Suite LL100
+        Denver, CO 80202
+        </p>
+        <p id='phone'>Phone: 303.731.3117</p>
+        <p id='email'>Email: spoof@guvis.mail.com</p>
+      </address>
+    </footer>
+  <script type="text/javascript" src="main.bundle.js"></script></body>
+</html>
